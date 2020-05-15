@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { URI } from './URI';
+import { URI } from '../config/config';
 
 
 export const connect = (location = URI) => {

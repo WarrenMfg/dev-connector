@@ -17,6 +17,11 @@ const UserSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: true
+  },
+  isLoggedIn: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 },
 {

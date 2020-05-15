@@ -1,9 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
+import jwt from 'jsonwebtoken';
+import { secret } from '../config/config';
+import routes from '../routes/routes';
 import { connect } from '../database/index';
-import users from '../routes/api/users.js';
-import profile from '../routes/api/profile.js';
-import posts from '../routes/api/posts.js';
 import { createGzip } from 'zlib';
 import { createReadStream } from 'fs';
 import { resolve } from 'path';
@@ -15,11 +15,29 @@ const app = express();
 // middleware
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// verify JWT
+app.use((req, res, next) => {
+  if (req?.headers?.authorization?.split(' ')[0] === 'Bearer') {
+    jwt.verify(req.headers.authorization.split(' ')[1], secret, (err, decode) => {
+      if (err) {
+        req.user = undefined;
+      } else {
+        // for loginRequired middleware
+        req.user = decode;
+      }
+      next();
+    });
+
+  } else {
+    req.user = undefined;
+    next();
+  }
+});
 
 // routes
-app.use('/api/users', users);
-app.use('/api/profile', profile);
-app.use('/api/posts', posts);
+routes(app);
 
 
 /*
