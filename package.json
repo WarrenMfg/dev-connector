@@ -1,7 +1,7 @@
 {
-  "name": "mern-stack-build-template",
+  "name": "dev-connector",
   "version": "1.0.0",
-  "description": "Template build for MERN stack projects",
+  "description": "Social site for developers",
   "keywords": [
     "react",
     "node",
@@ -10,15 +10,14 @@
     "mongoose",
     "babel",
     "webpack",
-    "MERN",
-    "template"
+    "MERN"
   ],
   "author": "Kent Warren",
   "license": "MIT",
   "homepage": "https://github.com/WarrenMfg",
   "repository": {
     "type": "git",
-    "url": "https://github.com/WarrenMfg/mern-stack-build-template"
+    "url": ""
   },
   "main": "backend/server/index.js",
   "scripts": {

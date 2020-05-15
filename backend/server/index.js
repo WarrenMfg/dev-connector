@@ -1,7 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import { connect } from '../database/index';
-import docRouter from '../doc/docRouter';
+import users from '../routes/api/users.js';
+import profile from '../routes/api/profile.js';
+import posts from '../routes/api/posts.js';
 import { createGzip } from 'zlib';
 import { createReadStream } from 'fs';
 import { resolve } from 'path';
@@ -10,10 +12,15 @@ import { resolve } from 'path';
 const PORT = process.env.PORT || 5000;
 const app = express();
 
+// middleware
 app.use(morgan('dev'));
 app.use(express.json());
 
-app.use('/api', docRouter);
+// routes
+app.use('/api/users', users);
+app.use('/api/profile', profile);
+app.use('/api/posts', posts);
+
 
 /*
 uncomment before app deploys
