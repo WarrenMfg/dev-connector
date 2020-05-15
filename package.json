@@ -1,0 +1,57 @@
+{
+  "name": "mern-stack-build-template",
+  "version": "1.0.0",
+  "description": "Template build for MERN stack projects",
+  "keywords": [
+    "react",
+    "node",
+    "express",
+    "mongoDB",
+    "mongoose",
+    "babel",
+    "webpack",
+    "MERN",
+    "template"
+  ],
+  "author": "Kent Warren",
+  "license": "MIT",
+  "homepage": "https://github.com/WarrenMfg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WarrenMfg/mern-stack-build-template"
+  },
+  "main": "backend/server/index.js",
+  "scripts": {
+    "seed": "node dist/database/seeder.js",
+    "buildFrontend": "npx webpack",
+    "watchFrontend": "npx webpack --watch",
+    "buildBackend": "npx babel backend --out-dir dist",
+    "watchBackend": "npx babel backend --watch --out-dir dist",
+    "start": "node dist/server/index.js",
+    "startDev": "nodemon dist/server/index.js"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "backend/*"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-react": "^7.9.4",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.5.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.3",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.10",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
