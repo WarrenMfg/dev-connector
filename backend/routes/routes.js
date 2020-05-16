@@ -7,6 +7,7 @@ import {
 } from './api/users';
 import {
   currentUserProfile,
+  validateProfileInput,
   createOrUpdateUserProfile
 } from './api/profile';
 
@@ -35,7 +36,7 @@ const routes = app => {
   app.route('/profile')
     .all(loginRequired)
     .get(currentUserProfile)
-    .post(createOrUpdateUserProfile)
+    .post(validateProfileInput, createOrUpdateUserProfile)
 
 };
 

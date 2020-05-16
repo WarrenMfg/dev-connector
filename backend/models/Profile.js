@@ -4,11 +4,14 @@ import mongoose from 'mongoose';
 const ProfileSchema = new mongoose.Schema({
   user: {
     type: mongoose.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    immutable: true
   },
-  url: {
+  // userName
+  slug: {
     type: String,
-    required: true
+    required: true,
+    immutable: true
   },
   company: {
     type: String

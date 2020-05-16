@@ -1,18 +1,37 @@
 import Profile from '../../models/Profile';
+import profileValidation from '../../validation/profile';
 
 
 export const currentUserProfile = async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user._id }).lean().exec();
+    const profile = await Profile.findOne({ user: req.user._id });
 
     if (!profile) {
       return res.status(404).json({ noProfile: true, message: 'Profile could not be found.' });
     }
 
-    res.send(profile);
+    profile
+      .execPopulate({ path: 'user', model: 'User', select: 'avatar' })
+      .then(populated => res.send(populated))
+      .catch(err => res.status(500).json({ message: err.message }));
 
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const validateProfileInput = (req, res, next) => {
+  const { errors, isValid, valid } = profileValidation(req.body);
+
+  // if invalid
+  if (!isValid) {
+    return res.status(400).json(errors);
+
+  // if valid
+  } else {
+    Object.assign(req.body, valid);
+    next();
   }
 };
 
@@ -22,7 +41,7 @@ export const createOrUpdateUserProfile = async (req, res) => {
     const tempProfileObj = {};
     // populate tempProfileObj object with logged in user _id
     tempProfileObj.user = req.user._id;
-    tempProfileObj.url = req.user.userName;
+    tempProfileObj.slug = req.user.userName;
 
     // populate tempProfileObj object with form data
     if (req.body.company) tempProfileObj.company = req.body.company;
@@ -35,6 +54,7 @@ export const createOrUpdateUserProfile = async (req, res) => {
     // skills
     if (typeof req.body.skills !== 'undefined') {
       tempProfileObj.skills = req.body.skills.split(',');
+      // trim each value here?
     }
 
     // social
@@ -51,7 +71,7 @@ export const createOrUpdateUserProfile = async (req, res) => {
 
     if (!profile) {
       // create
-      Profile.create(tempProfileObj).lean().exec()
+      Profile.create(tempProfileObj)
         .then(newUserProfile => res.send(newUserProfile))
         .catch(err => res.status(500).json({ message: err.message }));
 
