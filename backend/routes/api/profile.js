@@ -82,3 +82,41 @@ export const createOrUpdateUserProfile = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+export const getOneBySlug = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ slug: req.params.slug });
+
+    if (!profile) {
+      return res.status(404).json({ noProfile: true, message: 'Profile could not be found.' });
+    }
+
+    profile
+      .execPopulate({ path: 'user', model: 'User', select: 'avatar' })
+      .then(populated => res.send(populated))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const getAllProfiles = async (req, res) => {
+  try {
+    const profiles = await Profile.find({}).lean().exec();
+
+    if (!profiles) {
+      return res.status(404).json({ noProfile: true, message: 'Profiles could not be found.' });
+    }
+
+    Profile
+      .populate(profiles, { path: 'user', model: 'User', select: 'avatar' })
+      .then(populated => res.send(populated))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

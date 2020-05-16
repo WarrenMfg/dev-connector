@@ -7,7 +7,7 @@ const ProfileSchema = new mongoose.Schema({
     ref: 'User',
     immutable: true
   },
-  // userName
+  // same as User.userName
   slug: {
     type: String,
     required: true,

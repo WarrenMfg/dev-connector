@@ -8,7 +8,9 @@ import {
 import {
   currentUserProfile,
   validateProfileInput,
-  createOrUpdateUserProfile
+  createOrUpdateUserProfile,
+  getOneBySlug,
+  getAllProfiles
 } from './api/profile';
 
 
@@ -16,11 +18,13 @@ const routes = app => {
   // AUTHORIZATION
   // register
   app.route('/register')
+    // add condition if already logged in
     .all(validate)
     .post(register);
 
   // login
   app.route('/login')
+    // add condition if already logged in
     .all(validate)
     .post(login);
 
@@ -31,12 +35,22 @@ const routes = app => {
 
 
 
-  // PROFILE
+  // PROFILE (PRIVATE)
   // login user's profile
   app.route('/profile')
     .all(loginRequired)
     .get(currentUserProfile)
-    .post(validateProfileInput, createOrUpdateUserProfile)
+    .post(validateProfileInput, createOrUpdateUserProfile);
+
+  // PROFILE (PUBLIC)
+  // one
+  app.route('/profile/:slug')
+    .get(getOneBySlug);
+
+  // many
+  app.route('/devs')
+  .get(getAllProfiles);
+
 
 };
 
