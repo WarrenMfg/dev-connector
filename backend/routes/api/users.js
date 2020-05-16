@@ -3,6 +3,8 @@ import gravatar from 'gravatar';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { secret, expiresIn } from '../../config/config';
+import registerValidation from '../../validation/register';
+import loginValidation from '../../validation/login';
 
 
 
@@ -28,6 +30,25 @@ export const loginRequired = async (req, res, next) => {
 
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const validate = (req, res, next) => {
+  if (req.url === '/register') {
+    var { errors, isValid, valid } = registerValidation(req.body);
+  } else if (req.url === '/login') {
+    var { errors, isValid, valid } = loginValidation(req.body);
+  }
+
+  // if invalid
+  if (!isValid) {
+    return res.status(400).json(errors);
+
+  // if valid
+  } else {
+    req.body = valid;
+    next();
   }
 };
 
@@ -81,7 +102,7 @@ export const login = async (req, res) => {
 
     // if not found
     if (!user) {
-      return res.status(401).json({ message: 'Authentication failed. Wrong user name or password.' });
+      return res.status(401).json({ message: 'Authentication failed. Wrong username or password.' });
     }
 
     // if found
@@ -92,7 +113,7 @@ export const login = async (req, res) => {
       .then(match => {
         // if no match, send reason
         if (!match) {
-          res.status(401).json({ message: 'Authentication failed. Wrong user name or password.' });
+          res.status(401).json({ message: 'Authentication failed. Wrong username or password.' });
         // otherwise, passwordIsValid
         } else {
           passwordIsValid = true;

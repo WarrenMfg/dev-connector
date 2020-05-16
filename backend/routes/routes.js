@@ -1,4 +1,5 @@
 import {
+  validate,
   register,
   login,
   loginRequired,
@@ -10,10 +11,12 @@ const routes = app => {
   // AUTHORIZATION
   // register
   app.route('/register')
+    .all(validate)
     .post(register);
 
   // login
   app.route('/login')
+    .all(validate)
     .post(login);
 
   // logout
