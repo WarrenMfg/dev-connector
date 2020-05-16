@@ -9,6 +9,7 @@ import {
   currentUserProfile,
   validateProfileInput,
   createOrUpdateUserProfile,
+  validateExperienceInput,
   createOrUpdateExperience,
   getOneBySlug,
   getAllProfiles
@@ -45,7 +46,7 @@ const routes = app => {
 
   app.route('/experience')
     .all(loginRequired)
-    .post(createOrUpdateExperience)
+    .post(validateExperienceInput, createOrUpdateExperience);
 
   // PROFILE (PUBLIC)
   // one

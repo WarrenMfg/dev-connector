@@ -12,7 +12,7 @@ export default data => {
 
   // validate email
   if (!validator.isEmail(data.email)) {
-    errors.email = 'Email must be in the form of example@domain.com'
+    errors.email = 'Email must be in the form of example@domain.com';
   } else {
     valid.email = data.email;
   }

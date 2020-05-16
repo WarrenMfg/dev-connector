@@ -12,7 +12,7 @@ export default data => {
 
   // validate status
   if (validator.isEmpty(data.status)) {
-    errors.status = 'Status field is required'
+    errors.status = 'Status field is required';
   } else {
     valid.status = data.status;
   }

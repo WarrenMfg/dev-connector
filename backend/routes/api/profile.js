@@ -1,5 +1,6 @@
 import Profile from '../../models/Profile';
 import profileValidation from '../../validation/profile';
+import experienceValidation from '../../validation/experience';
 
 
 export const currentUserProfile = async (req, res) => {
@@ -118,6 +119,21 @@ export const getAllProfiles = async (req, res) => {
 
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const validateExperienceInput = (req, res, next) => {
+  const { errors, isValid, valid } = experienceValidation(req.body);
+
+  // if invalid
+  if (!isValid) {
+    return res.status(400).json(errors);
+
+  // if valid
+  } else {
+    Object.assign(req.body, valid);
+    next();
   }
 };
 
