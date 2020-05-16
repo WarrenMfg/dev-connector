@@ -173,6 +173,30 @@ export const createOrUpdateExperience = async (req, res) => {
 };
 
 
+export const deleteExperience = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user._id });
+
+    if (!profile) {
+      return res.status(404).json({ noProfile: true, message: 'Experience could not be deleted.' });
+    }
+
+    // filter out param
+    const filteredExperience = profile.experience.filter(exp => exp._id.toString() !== req.params._id);
+    profile.experience = filteredExperience;
+
+    // save to db
+    profile.save()
+      .then(updatedProfile => res.send(updatedProfile))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+
+};
+
+
 export const validateEducationInput = (req, res, next) => {
   const { errors, isValid, valid } = educationValidation(req.body);
 

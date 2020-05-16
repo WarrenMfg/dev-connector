@@ -11,6 +11,7 @@ import {
   createOrUpdateUserProfile,
   validateExperienceInput,
   createOrUpdateExperience,
+  deleteExperience,
   validateEducationInput,
   createOrUpdateEducation,
   getOneBySlug,
@@ -50,6 +51,10 @@ const routes = app => {
     .all(loginRequired)
     .post(validateExperienceInput, createOrUpdateExperience);
 
+  app.route('/experience/:_id')
+    .all(loginRequired)
+    .delete(deleteExperience);
+
   app.route('/education')
     .all(loginRequired)
     .post(validateEducationInput, createOrUpdateEducation);
@@ -61,7 +66,7 @@ const routes = app => {
 
   // many
   app.route('/devs')
-  .get(getAllProfiles);
+    .get(getAllProfiles);
 
 
 };
