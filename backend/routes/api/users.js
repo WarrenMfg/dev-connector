@@ -105,9 +105,22 @@ export const login = async (req, res) => {
       const loggedInUser = await User.findOneAndUpdate({ email: req.body.email }, { isLoggedIn: true }, { new: true }).lean().exec();
 
       if (!loggedInUser) {
-        res.status(400).json({ message: 'Could not log in user.' });
+        res.status(500).json({ message: 'Could not log in user.' });
+
+      // send token
       } else {
-        res.send({ token: jwt.sign({ userName: loggedInUser.userName, email: loggedInUser.email, _id: loggedInUser._id }, secret, { expiresIn }) });
+        const payload = {
+          userName: loggedInUser.userName,
+          email: loggedInUser.email,
+          _id: loggedInUser._id
+        };
+        jwt.sign(payload, secret, { expiresIn }, (err, token) => {
+          if (err) {
+            res.status(500).json({ message: 'Could not log in user.' });
+          } else {
+            res.json({ token: `Bearer ${token}` });
+          }
+        });
       }
     }
 
