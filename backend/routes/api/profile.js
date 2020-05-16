@@ -66,8 +66,7 @@ export const createOrUpdateUserProfile = async (req, res) => {
     if (req.body.instagram) tempProfileObj.social.instagram = req.body.instagram;
 
     // create or update profile
-    // change to findOneAndUpdate; if no profile returned, then create; else chain .then() and .catch() to Promise
-    const profile = await Profile.findOne({ user: req.user._id }).lean().exec();
+    const profile = await Profile.findOneAndUpdate({ user: req.user._id }, tempProfileObj, { new: true }).lean().exec();
 
     if (!profile) {
       // create
@@ -76,10 +75,7 @@ export const createOrUpdateUserProfile = async (req, res) => {
         .catch(err => res.status(500).json({ message: err.message }));
 
     } else {
-      // update
-      Profile.findOneAndUpdate({ user: req.user._id }, tempProfileObj, { new: true }).lean().exec()
-        .then(updatedUserProfile => res.send(updatedUserProfile))
-        .catch(err => res.status(500).json({ message: err.message }));
+      res.send(profile);
     }
 
   } catch (err) {
