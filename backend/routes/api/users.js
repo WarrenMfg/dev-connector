@@ -5,9 +5,37 @@ import jwt from 'jsonwebtoken';
 import { secret, expiresIn } from '../../config/config';
 
 
+
+export const loginRequired = async (req, res, next) => {
+  try {
+    // if JWT is verified (not expired)
+    if (req.user) {
+      // see if user is a valid user (e.g. not a deleted account)
+      const validUser = await User.findOne({ userName: req.user.userName, email: req.user.email, _id: req.user._id }).lean().exec();
+
+      // if no validUser (e.g. deleted account) or is validUser but not logged in
+      if (!validUser || !validUser.isLoggedIn) {
+        res.redirect(303, '/login');
+      // otherwise, if validUser and isLoggedIn
+      } else {
+        next();
+      }
+
+    // otherwise, JWT is not verified (e.g. expired), so redirect to login
+    } else {
+      res.redirect(303, '/login');
+    }
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
 export const register = async (req, res) => {
   try {
     // check if email already exists
+    // duplicate userName is currently allowed
     const user = await User.findOne({ email: req.body.email }).lean().exec();
     if (user) return res.status(401).json({ message: 'Account with the associated email already exists.' });
 
@@ -21,7 +49,7 @@ export const register = async (req, res) => {
 
     // create new user
     const newUser = new User({
-      name: req.body.name,
+      userName: req.body.userName,
       email: req.body.email,
       avatar,
       password: req.body.password
@@ -48,40 +76,59 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    // get user by userName
+    // get user by email
     const user = await User.findOne({ email: req.body.email }).lean().exec();
 
     // if not found
     if (!user) {
-      res.status(401).json({ message: 'Authentication failed. Wrong user name or password.' });
+      return res.status(401).json({ message: 'Authentication failed. Wrong user name or password.' });
+    }
 
     // if found
-    } else {
-      let passwordIsValid = false;
+    let passwordIsValid = false;
 
-      // compare password with hashPassword
-      await bcrypt.compare(req.body.password, user.password)
-        .then(match => {
-          // if no match, send reason
-          if (!match) {
-            res.status(401).json({ message: 'Authentication failed. Wrong user name or password.' });
-          // otherwise, passwordIsValid
-          } else {
-            passwordIsValid = true;
-          }
-        })
-        .catch(err => res.status(500).json({ message: err.message }));
-
-      // if passwordIsValid
-      if (passwordIsValid) {
-        const loggedInUser = await User.findOneAndUpdate({ email: req.body.email }, { isLoggedIn: true }, { new: true }).lean().exec();
-
-        if (!loggedInUser) {
-          res.status(400).json({ message: 'Could not log in user.' });
+    // compare password with hashPassword
+    await bcrypt.compare(req.body.password, user.password)
+      .then(match => {
+        // if no match, send reason
+        if (!match) {
+          res.status(401).json({ message: 'Authentication failed. Wrong user name or password.' });
+        // otherwise, passwordIsValid
         } else {
-          res.send({ token: jwt.sign({ name: loggedInUser.name, email: loggedInUser.email, avatar: loggedInUser.avatar, _id: loggedInUser._id }, secret, { expiresIn }) });
+          passwordIsValid = true;
         }
+      })
+      .catch(err => res.status(500).json({ message: err.message }));
+
+    // if passwordIsValid
+    if (passwordIsValid) {
+      const loggedInUser = await User.findOneAndUpdate({ email: req.body.email }, { isLoggedIn: true }, { new: true }).lean().exec();
+
+      if (!loggedInUser) {
+        res.status(400).json({ message: 'Could not log in user.' });
+      } else {
+        res.send({ token: jwt.sign({ userName: loggedInUser.userName, email: loggedInUser.email, _id: loggedInUser._id }, secret, { expiresIn }) });
       }
+    }
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const logout = async (req, res) => {
+  try {
+    // find user and log out
+    const loggedOutUser = await User.findOneAndUpdate({ userName: req.user.userName, email: req.user.email, _id: req.user._id }, { isLoggedIn: false }, { new: true }).lean().exec();
+
+    // if could not findOneAndUpdate
+    if (!loggedOutUser) {
+      res.status(500).json({ message: 'Could not log out user.' });
+    // otherwise send loggedOutUser
+    } else {
+      loggedOutUser.password = undefined;
+      res.send(loggedOutUser);
     }
 
   } catch (err) {
