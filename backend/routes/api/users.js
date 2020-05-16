@@ -55,10 +55,10 @@ export const validate = (req, res, next) => {
 
 export const register = async (req, res) => {
   try {
-    // check if email already exists
-    // duplicate userName is currently allowed
-    const user = await User.findOne({ email: req.body.email }).lean().exec();
-    if (user) return res.status(401).json({ message: 'Account with the associated email already exists.' });
+    // check if email and userName already exist
+    const user = await User.findOne({ $or: [{ email: req.body.email }, { userName: req.body.userName }] }).lean().exec();
+    if (req.body.email === user?.email) return res.status(401).json({ message: 'Account with the associated email already exists.' });
+    if (req.body.userName === user?.userName) return res.status(401).json({ message: 'Account with the associated username already exists.' });
 
     // create new user
     // fetch avatar
@@ -66,7 +66,7 @@ export const register = async (req, res) => {
       s: '200', // size
       r: 'pg', // rating
       d: 'mm' // default
-    });
+    }, true);
 
     // create new user
     const newUser = new User({

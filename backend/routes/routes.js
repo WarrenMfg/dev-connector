@@ -6,7 +6,8 @@ import {
   logout
 } from './api/users';
 import {
-  currentUsersProfile
+  currentUserProfile,
+  createOrUpdateUserProfile
 } from './api/profile';
 
 
@@ -33,7 +34,8 @@ const routes = app => {
   // login user's profile
   app.route('/profile')
     .all(loginRequired)
-    .get(currentUsersProfile)
+    .get(currentUserProfile)
+    .post(createOrUpdateUserProfile)
 
 };
 
