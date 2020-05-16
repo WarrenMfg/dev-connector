@@ -11,6 +11,8 @@ import {
   createOrUpdateUserProfile,
   validateExperienceInput,
   createOrUpdateExperience,
+  validateEducationInput,
+  createOrUpdateEducation,
   getOneBySlug,
   getAllProfiles
 } from './api/profile';
@@ -37,7 +39,7 @@ const routes = app => {
 
 
 
-  // PROFILE (PRIVATE)
+  // PROFILE (PROTECTED)
   // login user's profile
   app.route('/profile')
     .all(loginRequired)
@@ -47,6 +49,10 @@ const routes = app => {
   app.route('/experience')
     .all(loginRequired)
     .post(validateExperienceInput, createOrUpdateExperience);
+
+  app.route('/education')
+    .all(loginRequired)
+    .post(validateEducationInput, createOrUpdateEducation);
 
   // PROFILE (PUBLIC)
   // one

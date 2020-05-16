@@ -1,6 +1,7 @@
 import Profile from '../../models/Profile';
 import profileValidation from '../../validation/profile';
 import experienceValidation from '../../validation/experience';
+import educationValidation from '../../validation/education';
 
 
 export const currentUserProfile = async (req, res) => {
@@ -160,6 +161,55 @@ export const createOrUpdateExperience = async (req, res) => {
     // push and sort so newest is at index 0 and descending thereafter
     profile.experience.push(experience);
     profile.experience.sort((a, b) => b.from - a.from);
+
+    // save to db
+    profile.save()
+      .then(updatedProfile => res.send(updatedProfile))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const validateEducationInput = (req, res, next) => {
+  const { errors, isValid, valid } = educationValidation(req.body);
+
+  // if invalid
+  if (!isValid) {
+    return res.status(400).json(errors);
+
+  // if valid
+  } else {
+    Object.assign(req.body, valid);
+    next();
+  }
+};
+
+
+export const createOrUpdateEducation = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user._id });
+
+    if (!profile) {
+      return res.status(404).json({ noProfile: true, message: 'Education could not be found.' });
+    }
+
+    // build education from form input
+    const education = {
+      school: req.body.school,
+      degree: req.body.degree,
+      fieldOfStudy: req.body.fieldOfStudy,
+      from: req.body.from,
+      to: req.body.to,
+      current: req.body.current,
+      description: req.body.description
+    };
+
+    // push and sort so newest is at index 0 and descending thereafter
+    profile.education.push(education);
+    profile.education.sort((a, b) => b.from - a.from);
 
     // save to db
     profile.save()
