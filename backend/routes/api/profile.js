@@ -43,7 +43,7 @@ export const createOrUpdateUserProfile = async (req, res) => {
     tempProfileObj.user = req.user._id;
     tempProfileObj.slug = req.user.userName;
 
-    // populate tempProfileObj object with form data
+    // populate tempProfileObj object with form input
     if (req.body.company) tempProfileObj.company = req.body.company;
     if (req.body.website) tempProfileObj.website = req.body.website;
     if (req.body.location) tempProfileObj.location = req.body.location;
@@ -114,6 +114,40 @@ export const getAllProfiles = async (req, res) => {
     Profile
       .populate(profiles, { path: 'user', model: 'User', select: 'avatar' })
       .then(populated => res.send(populated))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const createOrUpdateExperience = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user._id });
+
+    if (!profile) {
+      return res.status(404).json({ noProfile: true, message: 'Experience could not be found.' });
+    }
+
+    // build experience from form input
+    const experience = {
+      title: req.body.title,
+      company: req.body.company,
+      location: req.body.location,
+      from: req.body.from,
+      to: req.body.to,
+      current: req.body.current,
+      description: req.body.description
+    };
+
+    // push and sort so newest is at index 0 and descending thereafter
+    profile.experience.push(experience);
+    profile.experience.sort((a, b) => b.from - a.from);
+
+    // save to db
+    profile.save()
+      .then(updatedProfile => res.send(updatedProfile))
       .catch(err => res.status(500).json({ message: err.message }));
 
   } catch (err) {

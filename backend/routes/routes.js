@@ -9,6 +9,7 @@ import {
   currentUserProfile,
   validateProfileInput,
   createOrUpdateUserProfile,
+  createOrUpdateExperience,
   getOneBySlug,
   getAllProfiles
 } from './api/profile';
@@ -41,6 +42,10 @@ const routes = app => {
     .all(loginRequired)
     .get(currentUserProfile)
     .post(validateProfileInput, createOrUpdateUserProfile);
+
+  app.route('/experience')
+    .all(loginRequired)
+    .post(createOrUpdateExperience)
 
   // PROFILE (PUBLIC)
   // one
