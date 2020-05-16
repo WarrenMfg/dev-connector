@@ -85,7 +85,7 @@ export const register = async (req, res) => {
     newUser.save()
       .then(user => {
         user.password = undefined;
-        res.json(user);
+        res.send(user);
       })
       .catch(err => res.status(500).json({ message: err.message }));
 
@@ -100,12 +100,12 @@ export const login = async (req, res) => {
     // get user by email
     const user = await User.findOne({ email: req.body.email }).lean().exec();
 
-    // if not found
+    // if no user exists
     if (!user) {
       return res.status(401).json({ message: 'Authentication failed. Wrong username or password.' });
     }
 
-    // if found
+    // if user exists
     let passwordIsValid = false;
 
     // compare password with hashPassword
@@ -139,7 +139,7 @@ export const login = async (req, res) => {
           if (err) {
             res.status(500).json({ message: 'Could not log in user.' });
           } else {
-            res.json({ token: `Bearer ${token}` });
+            res.send({ token: `Bearer ${token}` });
           }
         });
       }

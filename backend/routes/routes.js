@@ -5,6 +5,9 @@ import {
   loginRequired,
   logout
 } from './api/users';
+import {
+  currentUsersProfile
+} from './api/profile';
 
 
 const routes = app => {
@@ -24,6 +27,13 @@ const routes = app => {
     .all(loginRequired)
     .put(logout);
 
+
+
+  // PROFILE
+  // login user's profile
+  app.route('/profile')
+    .all(loginRequired)
+    .get(currentUsersProfile)
 
 };
 

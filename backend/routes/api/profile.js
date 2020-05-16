@@ -1,10 +1,17 @@
-import { Router } from 'express';
+import Profile from '../../models/Profile';
 
 
-const router = Router();
+export const currentUsersProfile = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user._id }).lean().exec();
 
-router.get('/test', (req, res) => {
-  res.json({ message: 'Profile works!' });
-});
+    if (!profile) {
+      return res.status(404).json({ noProfile: true, message: 'Profile could not be found.' });
+    }
 
-export default router;
+    res.send(profile);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
