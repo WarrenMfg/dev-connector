@@ -2,7 +2,8 @@ import express from 'express';
 import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import { secret } from '../config/config';
-import routes from '../routes/routes';
+// import routes from '../routes/routes';
+import apiRouter from '../routes/routes';
 import { connect } from '../database/index';
 import { createGzip } from 'zlib';
 import { createReadStream } from 'fs';
@@ -37,7 +38,8 @@ app.use((req, res, next) => {
 });
 
 // routes
-routes(app);
+app.use('/api', apiRouter);
+
 
 
 /*

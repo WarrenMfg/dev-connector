@@ -9,7 +9,7 @@ import loginValidation from '../../validation/login';
 
 export const hasVerifiedToken = (req, res, next) => {
   if (req.user) {
-    res.redirect(303, '/profile');
+    res.redirect(303, '/api/profile');
   } else {
     next();
   }
@@ -142,7 +142,7 @@ export const loginRequired = async (req, res, next) => {
 
       // if no validUser (e.g. deleted account) or is validUser but not logged in
       if (!validUser || !validUser.isLoggedIn) {
-        res.redirect(303, '/login');
+        res.redirect(303, '/api/login');
       // otherwise, if validUser and isLoggedIn
       } else {
         next();
@@ -150,7 +150,7 @@ export const loginRequired = async (req, res, next) => {
 
     // otherwise, JWT is not verified (e.g. expired), so redirect to login
     } else {
-      res.redirect(303, '/login');
+      res.redirect(303, '/api/login');
     }
 
   } catch (err) {

@@ -1,3 +1,4 @@
+import { Router } from 'express';
 import {
   hasVerifiedToken,
   validate,
@@ -21,65 +22,94 @@ import {
   getOneBySlug,
   getAllProfiles
 } from './api/profile';
+import {
+  validatePostInput,
+  createPost,
+  deletePost,
+  getPost,
+  getPosts
+} from './api/posts'
 
 
-const routes = app => {
+const apiRouter = Router();
+
+
+
   // AUTHORIZATION
   // register
-  app.route('/register')
-    // add condition in register for if already logged in
+  apiRouter.route('/register')
     .all(hasVerifiedToken, validate)
     // add get route
     .post(register);
 
   // login
-  app.route('/login')
-    // add condition in login for if already logged in
+  apiRouter.route('/login')
     .all(hasVerifiedToken, validate)
     // add get route
     .post(login);
 
   // logout
-  app.route('/logout')
+  apiRouter.route('/logout')
     .all(loginRequired)
     .put(logout);
 
 
 
-  // PROFILE (PROTECTED)
-  // login user's profile
-  app.route('/profile')
+  // PROFILE (PRIVATE)
+  apiRouter.route('/profile')
     .all(loginRequired)
     .get(currentUserProfile)
     .post(validateProfileInput, createOrUpdateUserProfile)
     .delete(deleteProfile, deleteUser);
 
-  app.route('/experience')
+  apiRouter.route('/experience')
     .all(loginRequired)
     .post(validateExperienceInput, createExperience);
 
-  app.route('/experience/:_id')
+  apiRouter.route('/experience/:_id')
     .all(loginRequired)
+    // add put
     .delete(deleteExperience);
 
-  app.route('/education')
+  apiRouter.route('/education')
     .all(loginRequired)
     .post(validateEducationInput, createEducation);
 
-  app.route('/education/:_id')
+  apiRouter.route('/education/:_id')
     .all(loginRequired)
+    // add put
     .delete(deleteEducation);
 
   // PROFILE (PUBLIC)
   // one
-  app.route('/profile/:slug')
+  apiRouter.route('/profile/:slug')
     .get(getOneBySlug);
 
   // many
-  app.route('/devs')
+  apiRouter.route('/devs')
     .get(getAllProfiles);
 
 
-};
 
-export default routes;
+  // POSTS
+  // one (PRIVATE)
+  apiRouter.route('/post')
+    .all(loginRequired)
+    .post(validatePostInput, createPost)
+
+  // one (PRIVATE)
+  apiRouter.route('/post/:_id')
+    .all(loginRequired)
+    .delete(deletePost)
+
+  // one (PUBLIC)
+  apiRouter.route('/post/:_id')
+    .get(getPost)
+
+  // many (PUBLIC)
+  apiRouter.route('/posts')
+    .get(getPosts)
+
+
+
+export default apiRouter;

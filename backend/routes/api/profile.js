@@ -172,6 +172,7 @@ export const createExperience = async (req, res) => {
 
     // push and sort so newest is at index 0 and descending thereafter
     profile.experience.push(experience);
+    // consider adding to frontend instead
     profile.experience.sort((a, b) => b.from - a.from);
 
     // save to db
@@ -244,6 +245,7 @@ export const createEducation = async (req, res) => {
 
     // push and sort so newest is at index 0 and descending thereafter
     profile.education.push(education);
+    // consider adding to frontend instead
     profile.education.sort((a, b) => b.from - a.from);
 
     // save to db
