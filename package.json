@@ -17,7 +17,7 @@
   "homepage": "https://github.com/WarrenMfg",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/WarrenMfg/dev-connector"
   },
   "main": "backend/server/index.js",
   "scripts": {
