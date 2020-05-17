@@ -52,7 +52,17 @@ app.get('/bundle.js', (req, res) => {
 });
 */
 
-app.use('/', express.static('client/public'));
+app.get('/manifest.webmanifest', (req, res) => {
+  const manifest = createReadStream(resolve(__dirname, '../../client/public/manifest.webmanifest'));
+  res.set({ 'Cache-Control': 'max-age=86400' });
+  manifest.pipe(res);
+});
+
+app.use(express.static('client/public'));
+
+app.get('*', (req, res) => {
+  res.sendFile(resolve(__dirname, '../../client/public/index.html'));
+});
 
 connect();
 app.listen(PORT, () => console.log('Listening on port', PORT));

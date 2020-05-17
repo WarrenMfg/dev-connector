@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'client/src/index.jsx'),
+  entry: path.resolve(__dirname, 'client/src/Index.js'),
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'client/public')
@@ -29,7 +29,12 @@ module.exports = {
             loader: 'url-loader'
           }
         ]
-      }
+      },
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
     ]
   },
   mode: 'development'
