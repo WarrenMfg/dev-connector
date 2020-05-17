@@ -200,12 +200,3 @@ export const deleteComment = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
-
-// export const getPosts = async (req, res) => {
-//   try {
-
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
