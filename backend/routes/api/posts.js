@@ -1,5 +1,6 @@
 import Post from '../../models/Post';
 import postValidation from '../../validation/post';
+import commentValidation from '../../validation/comment';
 
 
 export const validatePostInput = (req, res, next) => {
@@ -119,6 +120,78 @@ export const likeOrUnlikePost = async (req, res) => {
     }
 
     // save to db
+    post.save()
+      .then(updatedPost => res.send(updatedPost))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const validateCommentInput = (req, res, next) => {
+  const { errors, isValid, valid } = commentValidation(req.body);
+
+  // if invalid
+  if (!isValid) {
+    return res.status(400).json(errors);
+
+  // if valid
+  } else {
+    Object.assign(req.body, valid);
+    next();
+  }
+};
+
+
+export const addComment = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params._id);
+
+    if (!post) {
+      return res.status(404).json({ noPost: true, message: 'Comment could not be added.' });
+    }
+
+    const newComment = {
+      user: req.user._id,
+      text: req.body.text,
+      userName: req.body.userName,
+      avatar: req.body. avatar
+    };
+
+    post.comments.unshift(newComment);
+
+    post.save()
+      .then(updatedPost => res.send(updatedPost))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const deleteComment = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+
+    if (!post) {
+      return res.status(404).json({ noPost: true, message: 'Comment could not be deleted.' });
+    }
+
+    const index = post.comments.findIndex(comment => comment._id.toString() === req.params.comment_id);
+    // if comment does not exist
+    if (index === -1) {
+      return res.status(404).json({ message: 'Comment does not exist.' });
+
+    // if user is not comment creator
+    } else if (post.comments[index].user.toString() !== req.user._id) {
+      return res.status(405).json({ message: 'Comment could not be deleted.' });
+    }
+
+    // remove and save to db
+    post.comments.splice(index, 1);
     post.save()
       .then(updatedPost => res.send(updatedPost))
       .catch(err => res.status(500).json({ message: err.message }));
