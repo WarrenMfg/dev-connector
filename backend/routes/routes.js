@@ -3,17 +3,20 @@ import {
   register,
   login,
   loginRequired,
-  logout
+  logout,
+  deleteUser
 } from './api/users';
 import {
   currentUserProfile,
   validateProfileInput,
   createOrUpdateUserProfile,
+  deleteProfile,
   validateExperienceInput,
-  createOrUpdateExperience,
+  createExperience,
   deleteExperience,
   validateEducationInput,
-  createOrUpdateEducation,
+  createEducation,
+  deleteEducation,
   getOneBySlug,
   getAllProfiles
 } from './api/profile';
@@ -23,13 +26,13 @@ const routes = app => {
   // AUTHORIZATION
   // register
   app.route('/register')
-    // add condition if already logged in
+    // add condition in register for if already logged in
     .all(validate)
     .post(register);
 
   // login
   app.route('/login')
-    // add condition if already logged in
+    // add condition in login for if already logged in
     .all(validate)
     .post(login);
 
@@ -45,11 +48,12 @@ const routes = app => {
   app.route('/profile')
     .all(loginRequired)
     .get(currentUserProfile)
-    .post(validateProfileInput, createOrUpdateUserProfile);
+    .post(validateProfileInput, createOrUpdateUserProfile)
+    .delete(deleteProfile, deleteUser);
 
   app.route('/experience')
     .all(loginRequired)
-    .post(validateExperienceInput, createOrUpdateExperience);
+    .post(validateExperienceInput, createExperience);
 
   app.route('/experience/:_id')
     .all(loginRequired)
@@ -57,7 +61,11 @@ const routes = app => {
 
   app.route('/education')
     .all(loginRequired)
-    .post(validateEducationInput, createOrUpdateEducation);
+    .post(validateEducationInput, createEducation);
+
+  app.route('/education/:_id')
+    .all(loginRequired)
+    .delete(deleteEducation);
 
   // PROFILE (PUBLIC)
   // one

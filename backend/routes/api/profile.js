@@ -86,6 +86,18 @@ export const createOrUpdateUserProfile = async (req, res) => {
 };
 
 
+export const deleteProfile = (req, res, next) => {
+  try {
+    Profile.findOneAndRemove({ user: req.user._id }).lean().exec()
+      .then(() => next())
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
 export const getOneBySlug = async (req, res) => {
   try {
     const profile = await Profile.findOne({ slug: req.params.slug });
@@ -139,7 +151,7 @@ export const validateExperienceInput = (req, res, next) => {
 };
 
 
-export const createOrUpdateExperience = async (req, res) => {
+export const createExperience = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user._id });
 
@@ -193,7 +205,6 @@ export const deleteExperience = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-
 };
 
 
@@ -212,7 +223,7 @@ export const validateEducationInput = (req, res, next) => {
 };
 
 
-export const createOrUpdateEducation = async (req, res) => {
+export const createEducation = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user._id });
 
@@ -234,6 +245,29 @@ export const createOrUpdateEducation = async (req, res) => {
     // push and sort so newest is at index 0 and descending thereafter
     profile.education.push(education);
     profile.education.sort((a, b) => b.from - a.from);
+
+    // save to db
+    profile.save()
+      .then(updatedProfile => res.send(updatedProfile))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const deleteEducation = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user._id });
+
+    if (!profile) {
+      return res.status(404).json({ noProfile: true, message: 'Education could not be deleted.' });
+    }
+
+    // filter out param
+    const filteredEducation = profile.education.filter(edu => edu._id.toString() !== req.params._id);
+    profile.education = filteredEducation;
 
     // save to db
     profile.save()

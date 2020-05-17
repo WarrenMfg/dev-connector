@@ -169,3 +169,19 @@ export const logout = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+export const deleteUser = (req, res) => {
+  try {
+    User.findOneAndRemove({ _id: req.user._id }).lean().exec()
+      .then(removed => {
+        removed.password = undefined;
+        removed.isLoggedIn = false;
+        res.send(removed);
+      })
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
