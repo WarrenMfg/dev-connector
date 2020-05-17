@@ -97,6 +97,38 @@ export const deletePost = async (req, res) => {
 };
 
 
+export const likeOrUnlikePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params._id);
+
+    if (!post) {
+      return res.status(404).json({ noPost: true, message: 'Post could not be updated.' });
+    }
+
+    // find index of user's like
+    let index = post.likes.findIndex(like => like.user.toString() === req.user._id);
+
+    // if user hasn't liked post yet
+    if (index === -1) {
+      // add it
+      post.likes.push({ user: req.user._id });
+
+    // otherwise, remove user's like from post
+    } else {
+      post.likes.splice(index, 1);
+    }
+
+    // save to db
+    post.save()
+      .then(updatedPost => res.send(updatedPost))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
 // export const getPosts = async (req, res) => {
 //   try {
 

@@ -25,6 +25,7 @@ import {
 import {
   validatePostInput,
   createPost,
+  likeOrUnlikePost,
   deletePost,
   getPost,
   getPosts
@@ -96,6 +97,11 @@ const apiRouter = Router();
   apiRouter.route('/post')
     .all(loginRequired)
     .post(validatePostInput, createPost)
+
+  // one (PRIVATE)
+  apiRouter.route('/post/like/:_id')
+    .all(loginRequired)
+    .post(likeOrUnlikePost)
 
   // one (PRIVATE)
   apiRouter.route('/post/:_id')
