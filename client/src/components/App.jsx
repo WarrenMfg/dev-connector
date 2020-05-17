@@ -1,9 +1,13 @@
 import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Navbar from './layout/Navbar';
+import Footer from './layout/Footer';
+import Landing from './layout/Landing';
 
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
 
     };
@@ -11,7 +15,13 @@ class App extends React.Component {
 
   render() {
     return (
-      <h1>Hello world!</h1>
+      <Router>
+        <div className="App">
+          <Navbar />
+          <Route exact path="/" component={Landing} />
+          <Footer />
+        </div>
+      </Router>
     );
   }
 }
