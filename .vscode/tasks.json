@@ -1,0 +1,70 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "dependsOn": ["buildBackend", "watch"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "buildBackend",
+      "type": "npm",
+      "script": "buildBackend",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "watch",
+      "dependsOn": ["watchFrontend", "watchBackend", "startDev"]
+    },
+    {
+      "label": "watchFrontend",
+      "type": "npm",
+      "script": "watchFrontend",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": false,
+        "group": "watch"
+      }
+    },
+    {
+      "label": "watchBackend",
+      "type": "npm",
+      "script": "watchBackend",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": false,
+        "group": "watch"
+      }
+    },
+    {
+      "label": "startDev",
+      "type": "npm",
+      "script": "startDev",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": false,
+        "group": "watch"
+      }
+    }
+  ]
+}
