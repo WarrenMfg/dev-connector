@@ -7,9 +7,9 @@ img {
   background: url('../src/images/showcase.jpg') no-repeat;
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  height: calc(100vh - 56px - 72px);
   margin-top: -24px;
-  margin-bottom: -50px;
+  margin-bottom: -48px;
 }
 
 .landing-inner {

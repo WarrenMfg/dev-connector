@@ -58,7 +58,7 @@ app.get('/manifest.webmanifest', (req, res) => {
   manifest.pipe(res);
 });
 
-app.use(express.static('client/public'));
+app.use(express.static(resolve(__dirname, '../../client/public')));
 
 app.get('*', (req, res) => {
   res.sendFile(resolve(__dirname, '../../client/public/index.html'));
