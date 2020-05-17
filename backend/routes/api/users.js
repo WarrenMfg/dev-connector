@@ -7,29 +7,11 @@ import registerValidation from '../../validation/register';
 import loginValidation from '../../validation/login';
 
 
-
-export const loginRequired = async (req, res, next) => {
-  try {
-    // if JWT is verified (not expired)
-    if (req.user) {
-      // see if user is a valid user (e.g. not a deleted account)
-      const validUser = await User.findOne({ userName: req.user.userName, email: req.user.email, _id: req.user._id }).lean().exec();
-
-      // if no validUser (e.g. deleted account) or is validUser but not logged in
-      if (!validUser || !validUser.isLoggedIn) {
-        res.redirect(303, '/login');
-      // otherwise, if validUser and isLoggedIn
-      } else {
-        next();
-      }
-
-    // otherwise, JWT is not verified (e.g. expired), so redirect to login
-    } else {
-      res.redirect(303, '/login');
-    }
-
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+export const hasVerifiedToken = (req, res, next) => {
+  if (req.user) {
+    res.redirect(303, '/profile');
+  } else {
+    next();
   }
 };
 
@@ -143,6 +125,32 @@ export const login = async (req, res) => {
           }
         });
       }
+    }
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const loginRequired = async (req, res, next) => {
+  try {
+    // if JWT is verified (not expired)
+    if (req.user) {
+      // see if user is a valid user (e.g. not a deleted account)
+      const validUser = await User.findOne({ userName: req.user.userName, email: req.user.email, _id: req.user._id }).lean().exec();
+
+      // if no validUser (e.g. deleted account) or is validUser but not logged in
+      if (!validUser || !validUser.isLoggedIn) {
+        res.redirect(303, '/login');
+      // otherwise, if validUser and isLoggedIn
+      } else {
+        next();
+      }
+
+    // otherwise, JWT is not verified (e.g. expired), so redirect to login
+    } else {
+      res.redirect(303, '/login');
     }
 
   } catch (err) {

@@ -1,4 +1,5 @@
 import {
+  hasVerifiedToken,
   validate,
   register,
   login,
@@ -27,13 +28,15 @@ const routes = app => {
   // register
   app.route('/register')
     // add condition in register for if already logged in
-    .all(validate)
+    .all(hasVerifiedToken, validate)
+    // add get route
     .post(register);
 
   // login
   app.route('/login')
     // add condition in login for if already logged in
-    .all(validate)
+    .all(hasVerifiedToken, validate)
+    // add get route
     .post(login);
 
   // logout
