@@ -22,10 +22,27 @@ class Register extends React.Component {
   onSubmit(e) {
     e.preventDefault();
 
-    console.log('form submitted', this.state);
+    const newUser = {
+      userName: this.state.userName,
+      email: this.state.email,
+      password: this.state.password
+    };
+
+    fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newUser)
+    })
+      .then(res => res.json())
+      .then(errors => this.setState({ errors }))
+      .catch(console.error);
   }
 
   render() {
+    const { errors } = this.state;
+
     return (
       <div className="register">
         <div className="container">
@@ -34,20 +51,42 @@ class Register extends React.Component {
               <h1 className="display-4 text-center">Sign Up</h1>
               <p className="lead text-center">Create your devConnector account</p>
 
-              <form onSubmit={this.onSubmit}>
+              <form onSubmit={this.onSubmit} noValidate>
                 <div className="form-group">
-                  <input type="text" className="form-control form-control-lg" placeholder="Username" name="userName" value={this.state.name} onChange={this.onChange} />
+                  <input
+                    type="text"
+                    className={`form-control form-control-lg ${errors.userName && 'is-invalid'}`}
+                    placeholder="Username" name="userName"
+                    value={this.state.name}
+                    onChange={this.onChange}
+                  />
+                {errors.userName && <div className="invalid-feedback">{errors.userName}</div>}
                 </div>
+
                 <div className="form-group">
-                  <input type="email" className="form-control form-control-lg" placeholder="Email Address" name="email" value={this.state.email} onChange={this.onChange} />
-                  <small className="form-text text-muted">This site uses Gravatar for an associated profile image</small>
+                  <input
+                    type="email"
+                    className={`form-control form-control-lg ${errors.email && 'is-invalid'}`}
+                    placeholder="Email Address"
+                    name="email"
+                    value={this.state.email}
+                    onChange={this.onChange}
+                  />
+                  {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                  <small className="form-text text-muted">This site uses Gravatar for profile images</small>
                 </div>
+
                 <div className="form-group">
-                  <input type="password" className="form-control form-control-lg" placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} />
+                  <input
+                    type="password"
+                    className={`form-control form-control-lg ${errors.password && 'is-invalid'}`}
+                    placeholder="Password"
+                    name="password"
+                    value={this.state.password}
+                    onChange={this.onChange}
+                  />
+                  {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                 </div>
-                {/* <div className="form-group">
-                  <input type="password" className="form-control form-control-lg" placeholder="Confirm Password" name="password2" />
-                </div> */}
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
 
