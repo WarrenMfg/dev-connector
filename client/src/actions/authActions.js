@@ -1,4 +1,4 @@
-import { handleErrors, getHeaders } from '../utils/utils';
+import { handleErrors, getHeaders, setCurrentUser } from '../utils/utils';
 import { GET_ERRORS, SET_CURRENT_USER } from './types';
 import jwtDecode from 'jwt-decode';
 
@@ -27,23 +27,16 @@ export const loginUser = userData => dispatch => {
   })
     .then(handleErrors)
     .then(res => res.json())
-    .then(token => {
+    .then(data => {
       // save to local storage
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', data.token);
       // decode token to get userName and email
-      const decoded = jwtDecode(token);
+      const decoded = jwtDecode(data.token);
       // set current user
       dispatch(setCurrentUser(decoded));
     })
     .catch(err => dispatch({
       type: GET_ERRORS,
       payload: err
-    }))
-};
-
-const setCurrentUser = decoded => {
-  return {
-    type: SET_CURRENT_USER,
-    payload: decoded
-  }
+    }));
 };

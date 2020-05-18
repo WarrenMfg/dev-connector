@@ -84,7 +84,10 @@ export const login = async (req, res) => {
 
     // if no user exists
     if (!user) {
-      return res.status(401).json({ message: 'Authentication failed. Wrong username or password.' });
+      return res.status(401).json({
+        email: 'Authentication failed. Wrong username or password.',
+        password: 'Authentication failed. Wrong username or password.'
+      });
     }
 
     // if user exists
@@ -95,7 +98,10 @@ export const login = async (req, res) => {
       .then(match => {
         // if no match, send reason
         if (!match) {
-          res.status(401).json({ message: 'Authentication failed. Wrong username or password.' });
+          res.status(401).json({
+            email: 'Authentication failed. Wrong username or password.',
+            password: 'Authentication failed. Wrong username or password.'
+          });
         // otherwise, passwordIsValid
         } else {
           passwordIsValid = true;
@@ -108,20 +114,21 @@ export const login = async (req, res) => {
       const loggedInUser = await User.findOneAndUpdate({ email: req.body.email }, { isLoggedIn: true }, { new: true }).lean().exec();
 
       if (!loggedInUser) {
-        res.status(500).json({ message: 'Could not log in user.' });
+        return res.status(500).json({ email: 'Could not log in user.' });
 
       // send token
       } else {
         const payload = {
           userName: loggedInUser.userName,
           email: loggedInUser.email,
+          avatar: loggedInUser.avatar,
           _id: loggedInUser._id
         };
         jwt.sign(payload, secret, { expiresIn }, (err, token) => {
           if (err) {
-            res.status(500).json({ message: 'Could not log in user.' });
+            return res.status(500).json({ email: 'Could not log in user.' });
           } else {
-            res.send({ token: `Bearer ${token}` });
+            return res.send({ token: `Bearer ${token}` });
           }
         });
       }

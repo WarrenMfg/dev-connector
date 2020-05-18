@@ -109,7 +109,7 @@ Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
-}
+};
 
 // subscribe to store updates only with what this component needs
 const mapStateToProps = state => ({

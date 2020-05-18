@@ -14,7 +14,7 @@ export default (state = initialState, action) => {
         ...state, // this isn't needed right now
         isAuthenticated: !isEmpty(action.payload), // receives the decoded jwt or an empty object
         user: action.payload
-      }
+      };
     default:
       return state;
   }

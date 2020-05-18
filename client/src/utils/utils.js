@@ -1,3 +1,5 @@
+import { SET_CURRENT_USER } from '../actions/types';
+
 export const handleErrors = async response => {
   if (!response.ok) {
     throw await response.json();
@@ -6,6 +8,8 @@ export const handleErrors = async response => {
     return response;
   }
 };
+
+
 
 export const getHeaders = () => {
   const headers = {
@@ -20,6 +24,17 @@ export const getHeaders = () => {
 
   return headers;
 };
+
+
+
+export const setCurrentUser = decoded => {
+  return {
+    type: SET_CURRENT_USER,
+    payload: decoded
+  }
+};
+
+
 
 export const isEmpty = val =>
   val === undefined ||
