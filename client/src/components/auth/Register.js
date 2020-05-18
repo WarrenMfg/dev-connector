@@ -1,4 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { registerUser } from '../../actions/authActions';
 
 
 class Register extends React.Component {
@@ -28,16 +31,18 @@ class Register extends React.Component {
       password: this.state.password
     };
 
-    fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newUser)
-    })
-      .then(res => res.json())
-      .then(errors => this.setState({ errors }))
-      .catch(console.error);
+    this.props.registerUser(newUser);
+
+    // fetch('/api/register', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(newUser)
+    // })
+    //   .then(res => res.json())
+    //   .then(errors => this.setState({ errors }))
+    //   .catch(console.error);
   }
 
   render() {
@@ -98,4 +103,13 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps, { registerUser })(Register);
