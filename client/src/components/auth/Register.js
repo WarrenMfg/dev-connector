@@ -19,6 +19,13 @@ class Register extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    // if logged in and try to go to '/register' route
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.errors !== this.props.errors) {
       this.setState({ errors: this.props.errors });

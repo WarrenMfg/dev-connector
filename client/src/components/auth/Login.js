@@ -18,7 +18,15 @@ class Login extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    // if logged in and try to go to '/login' route
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
+
   componentDidUpdate(prevProps) {
+    // when isAuthenticated changes from false to true, reroute to /dashboard
     if (this.props.auth.isAuthenticated) {
       this.props.history.push('/dashboard');
     }

@@ -10,6 +10,7 @@ class Navbar extends React.Component {
     e.preventDefault();
 
     this.props.logoutUser();
+    window.location.href = '/';
   }
 
   render() {
