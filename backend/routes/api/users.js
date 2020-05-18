@@ -98,7 +98,7 @@ export const login = async (req, res) => {
       .then(match => {
         // if no match, send reason
         if (!match) {
-          res.status(401).json({
+          return res.status(401).json({
             email: 'Authentication failed. Wrong username or password.',
             password: 'Authentication failed. Wrong username or password.'
           });

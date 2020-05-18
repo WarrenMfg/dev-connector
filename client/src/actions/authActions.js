@@ -40,3 +40,12 @@ export const loginUser = userData => dispatch => {
       payload: err
     }));
 };
+
+// LOGOUT
+export const logoutUser = () => dispatch => {
+  // remove local storage
+  localStorage.removeItem('token');
+
+  // set current user to empty object to set isAuthenticated to false
+  dispatch(setCurrentUser({}))
+};
