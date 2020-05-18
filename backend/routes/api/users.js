@@ -7,15 +7,6 @@ import registerValidation from '../../validation/register';
 import loginValidation from '../../validation/login';
 
 
-// export const hasVerifiedToken = (req, res, next) => {
-//   if (req.user) {
-//     res.redirect(303, '/api/profile');
-//   } else {
-//     next();
-//   }
-// };
-
-
 export const validate = (req, res, next) => {
   if (req.url === '/register') {
     var { errors, isValid, valid } = registerValidation(req.body);
@@ -149,19 +140,19 @@ export const loginRequired = async (req, res, next) => {
 
       // if no validUser (e.g. deleted account) or is validUser but not logged in
       if (!validUser || !validUser.isLoggedIn) {
-        res.redirect(303, '/api/login');
+        return res.status(401).json({ message: 'Unauthorized.' });
       // otherwise, if validUser and isLoggedIn
       } else {
         next();
       }
 
-    // otherwise, JWT is not verified (e.g. expired), so redirect to login
+    // otherwise, JWT is not verified (e.g. expired)
     } else {
-      res.redirect(303, '/api/login');
+      return res.status(401).json({ message: 'Unauthorized.' });
     }
 
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -173,15 +164,15 @@ export const logout = async (req, res) => {
 
     // if could not findOneAndUpdate
     if (!loggedOutUser) {
-      res.status(500).json({ message: 'Could not log out user.' });
+      return res.status(500).json({ message: 'Could not log out user.' });
     // otherwise send loggedOutUser
     } else {
       loggedOutUser.password = undefined;
-      res.send(loggedOutUser);
+      return res.send(loggedOutUser);
     }
 
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 

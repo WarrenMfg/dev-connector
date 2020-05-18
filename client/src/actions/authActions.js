@@ -43,9 +43,23 @@ export const loginUser = userData => dispatch => {
 
 // LOGOUT
 export const logoutUser = () => dispatch => {
-  // remove local storage
-  localStorage.removeItem('token');
+  fetch('/api/logout', {
+    method: 'PUT',
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(() => {
+      // remove local storage
+      localStorage.removeItem('token');
+      // set current user to no user
+      dispatch(setCurrentUser({}));
+      // reroute to '/'
+      window.location.href = '/';
 
-  // set current user to empty object to set isAuthenticated to false
-  dispatch(setCurrentUser({}))
+    })
+    .catch(err => dispatch({
+      type: GET_ERRORS,
+      payload: err
+    }));
 };

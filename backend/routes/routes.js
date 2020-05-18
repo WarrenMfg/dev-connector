@@ -43,13 +43,11 @@ const apiRouter = Router();
   // register
   apiRouter.route('/register')
     .all(validate)
-    // add get route
     .post(register);
 
   // login
   apiRouter.route('/login')
     .all(validate)
-    // add get route
     .post(login);
 
   // logout
