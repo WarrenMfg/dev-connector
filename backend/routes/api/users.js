@@ -7,13 +7,13 @@ import registerValidation from '../../validation/register';
 import loginValidation from '../../validation/login';
 
 
-export const hasVerifiedToken = (req, res, next) => {
-  if (req.user) {
-    res.redirect(303, '/api/profile');
-  } else {
-    next();
-  }
-};
+// export const hasVerifiedToken = (req, res, next) => {
+//   if (req.user) {
+//     res.redirect(303, '/api/profile');
+//   } else {
+//     next();
+//   }
+// };
 
 
 export const validate = (req, res, next) => {
@@ -39,8 +39,8 @@ export const register = async (req, res) => {
   try {
     // check if email and userName already exist
     const user = await User.findOne({ $or: [{ email: req.body.email }, { userName: req.body.userName }] }).lean().exec();
-    if (req.body.email === user?.email) return res.status(401).json({ message: 'Account with the associated email already exists.' });
-    if (req.body.userName === user?.userName) return res.status(401).json({ message: 'Account with the associated username already exists.' });
+    if (req.body.email === user?.email) return res.status(401).json({ email: 'Account with the associated email already exists.' });
+    if (req.body.userName === user?.userName) return res.status(401).json({ userName: 'Account with the associated username already exists.' });
 
     // create new user
     // fetch avatar

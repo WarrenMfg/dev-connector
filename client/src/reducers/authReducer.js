@@ -1,4 +1,5 @@
-import { TEST_DISPATCH } from '../actions/types';
+import { SET_CURRENT_USER } from '../actions/types';
+import { isEmpty } from '../utils/utils';
 
 
 const initialState = {
@@ -8,9 +9,10 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case TEST_DISPATCH:
+    case SET_CURRENT_USER:
       return {
-        ...state,
+        ...state, // this isn't needed right now
+        isAuthenticated: !isEmpty(action.payload), // receives the decoded jwt or an empty object
         user: action.payload
       }
     default:

@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
@@ -18,6 +19,18 @@ class Register extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.errors !== this.props.errors) {
+      this.setState({ errors: this.props.errors });
+    }
+  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.errors) {
+  //     this.setState({ errors: nextProps.errors });
+  //   }
+  // }
+
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -31,18 +44,7 @@ class Register extends React.Component {
       password: this.state.password
     };
 
-    this.props.registerUser(newUser);
-
-    // fetch('/api/register', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(newUser)
-    // })
-    //   .then(res => res.json())
-    //   .then(errors => this.setState({ errors }))
-    //   .catch(console.error);
+    this.props.registerUser(newUser, this.props.history);
   }
 
   render() {
@@ -105,11 +107,19 @@ class Register extends React.Component {
 
 Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 }
 
+// subscribe to store updates only with what this component needs
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  errors: state.errors
 });
 
-export default connect(mapStateToProps, { registerUser })(Register);
+// dispatch => bindActionCreators(mapDispatchToProps, dispatch)
+const mapDispatchToProps = {
+  registerUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Register));
