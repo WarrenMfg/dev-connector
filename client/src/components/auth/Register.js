@@ -1,4 +1,5 @@
 import React from 'react';
+import TextFieldGroup from '../common/TextFieldGroup';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -66,41 +67,33 @@ class Register extends React.Component {
               <p className="lead text-center">Create your devConnector account</p>
 
               <form onSubmit={this.onSubmit} noValidate>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className={`form-control form-control-lg ${errors.userName && 'is-invalid'}`}
-                    placeholder="Username" name="userName"
-                    value={this.state.name}
-                    onChange={this.onChange}
-                  />
-                {errors.userName && <div className="invalid-feedback">{errors.userName}</div>}
-                </div>
+                <TextFieldGroup
+                  name='userName'
+                  placeholder='Username'
+                  value={this.state.userName}
+                  error={errors.userName}
+                  onChange={this.onChange}
+                />
 
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className={`form-control form-control-lg ${errors.email && 'is-invalid'}`}
-                    placeholder="Email Address"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.onChange}
-                  />
-                  {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-                  <small className="form-text text-muted">This site uses Gravatar for profile images</small>
-                </div>
+                <TextFieldGroup
+                  name='email'
+                  placeholder='Email Address'
+                  value={this.state.email}
+                  error={errors.email}
+                  type='email'
+                  onChange={this.onChange}
+                  info='This site uses Gravatar for profile images'
+                />
 
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={`form-control form-control-lg ${errors.password && 'is-invalid'}`}
-                    placeholder="Password"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                  />
-                  {errors.password && <div className="invalid-feedback">{errors.password}</div>}
-                </div>
+                <TextFieldGroup
+                  name='password'
+                  placeholder='Password'
+                  value={this.state.password}
+                  error={errors.password}
+                  type='password'
+                  onChange={this.onChange}
+                />
+
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
 
