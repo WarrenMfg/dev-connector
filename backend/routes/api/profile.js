@@ -8,6 +8,7 @@ export const currentUserProfile = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user._id });
 
+    // if no profile created yet, or could not be found
     if (!profile) {
       return res.status(404).json({ noProfile: true, message: 'Profile could not be found.' });
     }
