@@ -1,14 +1,12 @@
 import express from 'express';
-import serveStatic from 'serve-static';
 import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import { secret } from '../config/config';
-// import routes from '../routes/routes';
 import apiRouter from '../routes/routes';
 import { connect } from '../database/index';
 import { createGzip } from 'zlib';
 import { createReadStream } from 'fs';
-import { resolve, join } from 'path';
+import { resolve } from 'path';
 
 
 const PORT = process.env.PORT || 5000;
