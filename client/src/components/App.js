@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import store from '../store';
-import { getHeaders, setCurrentUser } from '../utils/utils';
+import { setCurrentUser } from '../utils/utils';
 import Navbar from './layout/Navbar';
 import Footer from './layout/Footer';
 import Landing from './layout/Landing';
@@ -33,22 +33,15 @@ if (localStorage.token) {
 
 
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-
-    };
-  }
-
   render() {
     return (
       <div className="App">
         <Navbar />
+        <Route exact path="/"component={Landing} />
 
         <div>
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/"component={Landing} />
         </div>
 
         <Footer />
