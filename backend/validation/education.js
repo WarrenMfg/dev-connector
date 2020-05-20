@@ -28,14 +28,14 @@ export default data => {
 
   // validate fieldOfStudy
   if (validator.isEmpty(data.fieldOfStudy)) {
-    errors.fieldOfStudy = 'Field of study field is required';
+    errors.fieldOfStudy = 'Field of Study field is required';
   } else {
     valid.fieldOfStudy = data.fieldOfStudy;
   }
 
   // validate from
   if (validator.isEmpty(data.from)) {
-    errors.from = 'From date field is required';
+    errors.from = 'From Date field is required';
   } else {
     valid.from = data.from;
   }

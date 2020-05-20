@@ -4,16 +4,16 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
-import { createExperience } from '../../actions/profileActions';
+import { createEducation } from '../../actions/profileActions';
 
 
-class AddExperience extends Component {
+class AddEducation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
-      company: '',
-      location: '',
+      school: '',
+      degree: '',
+      fieldOfStudy: '',
       from: '',
       to: '',
       current: false,
@@ -36,17 +36,17 @@ class AddExperience extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const experienceData = {
-      title: this.state.title,
-      company: this.state.company,
-      location: this.state.location,
+    const educationData = {
+      school: this.state.school,
+      degree: this.state.degree,
+      fieldOfStudy: this.state.fieldOfStudy,
       from: this.state.from,
       to: this.state.to,
       current: this.state.current,
       description: this.state.description,
     };
 
-    this.props.createExperience(experienceData, this.props.history);
+    this.props.createEducation(educationData, this.props.history);
   }
 
   onChange(e) {
@@ -61,37 +61,37 @@ class AddExperience extends Component {
     const { errors } = this.state;
 
     return (
-      <div className="add-experience">
+      <div className="add-education">
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
               <Link to="/dashboard" className="btn btn-light">Go Back</Link>
-              <h1 className="display-4 text-center">Add Experience</h1>
-              <p className="lead text-center">Add a past or current position</p>
+              <h1 className="display-4 text-center">Add Education</h1>
+              <p className="lead text-center">Add past or current education</p>
 
               <form onSubmit={this.onSubmit}>
 
                 <TextFieldGroup
-                  name='title'
-                  placeholder='* Title'
-                  value={this.state.title}
-                  error={errors.title}
+                  name='school'
+                  placeholder='* School'
+                  value={this.state.school}
+                  error={errors.school}
                   onChange={this.onChange}
                 />
 
                 <TextFieldGroup
-                  name='company'
-                  placeholder='* Company'
-                  value={this.state.company}
-                  error={errors.company}
+                  name='degree'
+                  placeholder='* Degree'
+                  value={this.state.degree}
+                  error={errors.degree}
                   onChange={this.onChange}
                 />
 
                 <TextFieldGroup
-                  name='location'
-                  placeholder='Location'
-                  value={this.state.location}
-                  error={errors.location}
+                  name='fieldOfStudy'
+                  placeholder='* Field of Study'
+                  value={this.state.fieldOfStudy}
+                  error={errors.fieldOfStudy}
                   onChange={this.onChange}
                 />
 
@@ -124,11 +124,11 @@ class AddExperience extends Component {
                     onChange={this.onCheck}
                     id="curent"
                   />
-                  <label htmlFor="current" className="form-check-label">Current Position</label>
+                  <label htmlFor="current" className="form-check-label">Currently Enrolled</label>
                 </div>
 
                 <TextAreaFieldGroup
-                  placeholder='Job Description'
+                  placeholder='Description, Honors, Awards, etc.'
                   name='description'
                   value={this.state.description}
                   onChange={this.onChange}
@@ -146,8 +146,8 @@ class AddExperience extends Component {
   }
 }
 
-AddExperience.propTypes = {
-  createExperience: PropTypes.func.isRequired,
+AddEducation.propTypes = {
+  createEducation: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
 };
 
@@ -156,7 +156,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  createExperience
+  createEducation
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddExperience));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddEducation));

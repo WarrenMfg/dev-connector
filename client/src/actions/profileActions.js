@@ -23,8 +23,6 @@ export const getCurrentProfile = () => dispatch => {
 
 
 export const createOrUpdateProfile = (profileData, history) => dispatch => {
-  // dispatch(setProfileLoading());
-
   fetch('/api/profile', {
     method: 'POST',
     headers: getHeaders(),
@@ -41,12 +39,26 @@ export const createOrUpdateProfile = (profileData, history) => dispatch => {
 
 
 export const createExperience = (experienceData, history) => dispatch => {
-  // dispatch(setProfileLoading());
-
   fetch('/api/experience', {
     method: 'POST',
     headers: getHeaders(),
     body: JSON.stringify(experienceData)
+  })
+    .then(handleErrors)
+    .then(() => history.push('/dashboard'))
+    .catch(err => dispatch({
+      type: GET_ERRORS,
+      payload: err
+    })
+  );
+};
+
+
+export const createEducation = (educationData, history) => dispatch => {
+  fetch('/api/education', {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(educationData)
   })
     .then(handleErrors)
     .then(() => history.push('/dashboard'))
