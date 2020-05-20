@@ -58,14 +58,14 @@ export const createOrUpdateUserProfile = async (req, res) => {
     if (req.body.skills) {
       tempProfileObj.skills =
         req.body.skills
-          .trim() // trim whitespace from entire string
           .split(',') // split into array
           .reduce((acc, val) => { // trim whitespace from individual skills
-            if (val) {
-              acc.push(val.trim());
+            const trimmed = val.trim();
+            if (trimmed) {
+              acc.push(trimmed);
               return acc;
             } else {
-              return acc;
+              return acc
             }
           }, []);
     }

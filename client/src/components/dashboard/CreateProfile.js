@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import InputGroup from '../common/InputGroup';
+import { createProfile } from '../../actions/profileActions';
+
 
 class CreateProfile extends Component {
   constructor() {
@@ -31,14 +34,35 @@ class CreateProfile extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.errors !== this.props.errors) {
+      this.setState({ errors: this.props.errors });
+    }
+  }
+
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
   onSubmit(e) {
-    e.preventDevault();
+    e.preventDefault();
 
-    console.log('submitted');
+    const profileData = {
+      company: this.state.company,
+      website: this.state.website,
+      location: this.state.location,
+      status: this.state.status,
+      githubUserName: this.state.githubUserName,
+      skills: this.state.skills,
+      bio: this.state.bio,
+      youtube: this.state.youtube,
+      twitter: this.state.twitter,
+      facebook: this.state.facebook,
+      linkedin: this.state.linkedin,
+      instagram: this.state.instagram
+    };
+
+    this.props.createProfile(profileData, this.props.history);
   }
 
   render() {
@@ -51,7 +75,6 @@ class CreateProfile extends Component {
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Create Your Profile</h1>
               <p className="lead text-center">Make your profile standout!</p>
-              <small className="d-block pb-3">* required</small>
 
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
@@ -66,10 +89,9 @@ class CreateProfile extends Component {
 
                 <SelectListGroup
                   name='status'
-                  placeholder='* Status'
                   value={this.state.status}
                   error={errors.status}
-                  info='Your career stage'
+                  info='Your career stage (required)'
                   onChange={this.onChange}
                   options={getOptions()}
                 />
@@ -103,10 +125,10 @@ class CreateProfile extends Component {
 
                 <TextFieldGroup
                   name='skills'
-                  placeholder='* Skills'
+                  placeholder='Skills'
                   value={this.state.skills}
                   error={errors.skills}
-                  info='Comma separated list of skills'
+                  info='Comma separated list of skills (required)'
                   onChange={this.onChange}
                 />
 
@@ -161,7 +183,7 @@ class CreateProfile extends Component {
 // SelectListGroup options for status
 const getOptions = () => (
   [
-    { label: '* Select a Professional Status', value: '' },
+    { label: 'Select a Professional Status', value: '' },
     { label: 'Developer', value: 'Developer' },
     { label: 'Junior Developer', value: 'Junior Developer' },
     { label: 'Senior Developer', value: 'Senior Developer' },
@@ -228,7 +250,8 @@ const getSocialInputs = (state, onChange) => {
 CreateProfile.propTypes = {
   // slug: PropTypes.string.isRequired,
   profile: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  createProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -238,7 +261,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-
+  createProfile
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateProfile)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreateProfile))

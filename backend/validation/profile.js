@@ -12,13 +12,6 @@ export default data => {
   data.skills = data.skills || '';
 
 
-  // validate slug
-  if (validator.isEmpty(data.slug)) {
-    errors.slug = 'Slug field is required';
-  } else {
-    valid.slug = data.slug;
-  }
-
   // validate status
   if (validator.isEmpty(data.status)) {
     errors.status = 'Status field is required';

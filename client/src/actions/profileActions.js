@@ -20,9 +20,26 @@ export const getCurrentProfile = () => dispatch => {
   );
 };
 
+export const createProfile = (profileData, history) => dispatch => {
+  dispatch(setProfileLoading());
+
+  fetch('/api/profile', {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(profileData)
+  })
+    .then(handleErrors)
+    .then(() => history.push('/dashboard'))
+    .catch(err => dispatch({
+      type: GET_ERRORS,
+      payload: err
+    })
+  );
+};
+
 export const setProfileLoading = () => ({
-    type: PROFILE_LOADING
-  });
+  type: PROFILE_LOADING
+});
 
 export const clearCurrentProfile = () => ({
   type: CLEAR_CURRENT_PROFILE
