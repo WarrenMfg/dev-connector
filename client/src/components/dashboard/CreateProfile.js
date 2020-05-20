@@ -1,18 +1,54 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import TextFieldGroup from '../common/TextFieldGroup';
 
-export class CreateProfile extends Component {
+class CreateProfile extends Component {
+  constructor() {
+    super();
+    this.state = {
+      displaySocialInputs: false,
+      company: '',
+      website: '',
+      location: '',
+      status: '',
+      skills: [],
+      bio: '',
+      githubUserName: '',
+      youtube: '',
+      twitter: '',
+      facebook: '',
+      linkedin: '',
+      instagram: '',
+      errors: {}
+    };
+  }
+
   render() {
     return (
-      <div>
-
+      <div className='create-profile'>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <h1 className="display-4 text-center">Create Your Profile</h1>
+              <p className="lead text-center">Make your profile standout!</p>
+              <small className="d-block pb-3">* required</small>
+            </div>
+          </div>
+        </div>
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => ({
+CreateProfile.propTypes = {
+  profile: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
 
+const mapStateToProps = state => ({
+  profile: state.profile,
+  errors: state.errors
 })
 
 const mapDispatchToProps = {
