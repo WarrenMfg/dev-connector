@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { getCurrentProfile } from '../../actions/profileActions';
 import Spinner from '../common/Spinner';
+import { isEmpty } from '../../../../backend/validation/utils';
 
 
 class Dashboard extends React.Component {
@@ -15,10 +17,23 @@ class Dashboard extends React.Component {
     const { profile, loading } = this.props.profile;
     let dashboardContent;
 
+    // if profile is still null or loading
     if (profile === null || loading) {
       dashboardContent = <Spinner />
+
+    // if no profile created yet
+    } else if (isEmpty(profile)) {
+      dashboardContent = (
+        <div>
+          <p className="lead text-muted">Welcome { user.userName }</p>
+          <p>You haven't setup a profile yet.</p>
+          <Link to='/create-profile' className="btn btn-lg btn-info">Create Profile</Link>
+        </div>
+      );
+
+    // otherwise render profile
     } else {
-      dashboardContent = <h1>Hello</h1>
+      dashboardContent = <h4>TODO: DISPLAY PROFILE</h4>
     }
 
     return (
