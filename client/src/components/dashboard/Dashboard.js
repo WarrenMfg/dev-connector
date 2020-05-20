@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -7,7 +7,7 @@ import Spinner from '../common/Spinner';
 import { isEmpty } from '../../../../backend/validation/utils';
 
 
-class Dashboard extends React.Component {
+class Dashboard extends Component {
   componentDidMount() {
     this.props.getCurrentProfile();
   }

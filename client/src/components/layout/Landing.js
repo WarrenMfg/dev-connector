@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 
 
-class Landing extends React.Component {
+class Landing extends Component {
   componentDidMount() {
     // if logged in and try to go to '/'
     if (this.props.auth.isAuthenticated) {

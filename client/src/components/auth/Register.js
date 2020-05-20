@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import TextFieldGroup from '../common/TextFieldGroup';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
 
 
-class Register extends React.Component {
+class Register extends Component {
   constructor() {
     super();
     this.state = {
