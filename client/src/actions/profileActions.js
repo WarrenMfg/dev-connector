@@ -22,7 +22,7 @@ export const getCurrentProfile = () => dispatch => {
 };
 
 
-export const createProfile = (profileData, history) => dispatch => {
+export const createOrUpdateProfile = (profileData, history) => dispatch => {
   dispatch(setProfileLoading());
 
   fetch('/api/profile', {

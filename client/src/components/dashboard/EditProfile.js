@@ -6,10 +6,10 @@ import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import InputGroup from '../common/InputGroup';
-import { createOrUpdateProfile } from '../../actions/profileActions';
+import { createOrUpdateProfile, getCurrentProfile } from '../../actions/profileActions';
 
 
-class CreateProfile extends Component {
+class EditProfile extends Component {
   constructor() {
     super();
     this.state = {
@@ -34,9 +34,25 @@ class CreateProfile extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.props.getCurrentProfile();
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.errors !== this.props.errors) {
       this.setState({ errors: this.props.errors });
+    }
+    if (prevProps.profile.profile !== this.props.profile.profile) {
+      let profile = this.props.profile.profile;
+      // make skills CSV from skills array
+      const skills = profile.skills.join(',');
+      // normalize the other properties
+      profile = normalizeProfileData(profile);
+
+      // destructure
+      const { company, website, location, status, bio, githubUserName, youtube, twitter, facebook, linkedin, instagram } = profile;
+      // set component state
+      this.setState({ company, website, location, status, skills, bio, githubUserName, youtube, twitter, facebook, linkedin, instagram });
     }
   }
 
@@ -73,7 +89,7 @@ class CreateProfile extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Create Your Profile</h1>
+              <h1 className="display-4 text-center">Edit Your Profile</h1>
               <p className="lead text-center">Make your profile standout!</p>
 
               <form onSubmit={this.onSubmit}>
@@ -166,7 +182,7 @@ class CreateProfile extends Component {
 
                 <input
                   type="submit"
-                  value='Submit'
+                  value='Update'
                   className='btn btn-info btn-block mt-4'
                 />
               </form>
@@ -246,21 +262,42 @@ const getSocialInputs = (state, onChange) => {
   );
 };
 
-CreateProfile.propTypes = {
+const normalizeProfileData = profile => {
+  // profile
+  profile.company = profile.company ? profile.company : '';
+  profile.website = profile.website ? profile.website : '';
+  profile.location = profile.location ? profile.location : '';
+  profile.status = profile.status ? profile.status : '';
+  profile.bio = profile.bio ? profile.bio : '';
+  profile.githubUserName = profile.githubUserName ? profile.githubUserName : '';
+  // social
+  profile.social = profile.social ? profile.social : {};
+  profile.youtube = profile.social?.youtube ? profile.social?.youtube : '';
+  profile.twitter = profile.social?.twitter ? profile.social?.twitter : '';
+  profile.facebook = profile.social?.facebook ? profile.social?.facebook : '';
+  profile.linkedin = profile.social?.linkedin ? profile.social?.linkedin : '';
+  profile.instagram = profile.social?.instagram ? profile.social?.instagram : '';
+
+  return profile;
+};
+
+EditProfile.propTypes = {
   slug: PropTypes.string.isRequired,
-  // profile: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
-  createOrUpdateProfile: PropTypes.func.isRequired
+  createOrUpdateProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   slug: state.auth.user.userName,
-  // profile: state.profile,
+  profile: state.profile,
   errors: state.errors
 })
 
 const mapDispatchToProps = {
-  createOrUpdateProfile
+  createOrUpdateProfile,
+  getCurrentProfile
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreateProfile))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditProfile));
