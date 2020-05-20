@@ -55,9 +55,19 @@ export const createOrUpdateUserProfile = async (req, res) => {
     if (req.body.githubUserName) tempProfileObj.githubUserName = req.body.githubUserName;
 
     // skills
-    if (typeof req.body.skills !== 'undefined') {
-      tempProfileObj.skills = req.body.skills.split(',');
-      // trim each value here?
+    if (req.body.skills) {
+      tempProfileObj.skills =
+        req.body.skills
+          .trim() // trim whitespace from entire string
+          .split(',') // split into array
+          .reduce((acc, val) => { // trim whitespace from individual skills
+            if (val) {
+              acc.push(val.trim());
+              return acc;
+            } else {
+              return acc;
+            }
+          }, []);
     }
 
     // social

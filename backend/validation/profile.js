@@ -7,8 +7,17 @@ export default data => {
   const valid = {};
 
   // ensure properties are present
+  data.slug = data.slug?.trim() || '';
   data.status = data.status?.trim() || '';
   data.skills = data.skills || '';
+
+
+  // validate slug
+  if (validator.isEmpty(data.slug)) {
+    errors.slug = 'Slug field is required';
+  } else {
+    valid.slug = data.slug;
+  }
 
   // validate status
   if (validator.isEmpty(data.status)) {
