@@ -54,9 +54,6 @@ export const logoutUser = () => dispatch => {
       localStorage.removeItem('token');
       // set current user to no user
       dispatch(setCurrentUser({}));
-      // reroute to '/'
-      window.location.href = '/';
-
     })
     .catch(err => dispatch({
       type: GET_ERRORS,

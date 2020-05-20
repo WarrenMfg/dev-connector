@@ -1,5 +1,6 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import PrivateRoute from './common/PrivateRoute';
 import jwtDecode from 'jwt-decode';
 import store from '../store';
 import { setCurrentUser } from '../utils/utils';
@@ -44,7 +45,9 @@ class App extends React.Component {
         <div>
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/dashboard" component={Dashboard} />
+          <Switch>
+            <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          </Switch>
         </div>
 
         <Footer />
