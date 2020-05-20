@@ -7,7 +7,7 @@ import Spinner from '../common/Spinner';
 import { isEmpty } from '../../../../backend/validation/utils';
 import ProfileButtons from './ProfileButtons';
 import Experience from './Experience';
-// import Education from './Education';
+import Education from './Education';
 
 
 class Dashboard extends Component {
@@ -46,7 +46,7 @@ class Dashboard extends Component {
           <ProfileButtons />
 
           <Experience experience={profile.experience} />
-          {/* <Education education={profile.education} /> */}
+          <Education education={profile.education} />
 
           <div style={{ marginBottom: '60px' }} />
           <button className="btn btn-danger" onClick={this.onDeleteClick.bind(this)}>Delete My Account</button>

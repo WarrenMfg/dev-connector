@@ -14,7 +14,7 @@ import Dashboard from './dashboard/Dashboard';
 import CreateProfile from './dashboard/CreateProfile';
 import EditProfile from './dashboard/EditProfile';
 import AddExperience from './dashboard/AddExperience';
-// import AddEducation from './dashboard/AddEducation';
+import AddEducation from './dashboard/AddEducation';
 
 
 // Check for token
@@ -61,9 +61,9 @@ class App extends Component {
           <Switch>
             <PrivateRoute exact path="/add-experience" component={AddExperience} />
           </Switch>
-          {/* <Switch>
+          <Switch>
             <PrivateRoute exact path="/add-education" component={AddEducation} />
-          </Switch> */}
+          </Switch>
         </div>
 
         <Footer />
