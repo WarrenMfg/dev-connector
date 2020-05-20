@@ -13,10 +13,7 @@ export const currentUserProfile = async (req, res) => {
       return res.status(204).json({ noProfile: true, message: 'Profile not yet created or could not be found.' });
     }
 
-    profile
-      .execPopulate({ path: 'user', model: 'User', select: 'avatar' })
-      .then(populated => res.send(populated))
-      .catch(err => res.status(500).json({ message: err.message }));
+    return res.send(profile);
 
   } catch (err) {
     res.status(500).json({ message: err.message });

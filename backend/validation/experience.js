@@ -27,7 +27,7 @@ export default data => {
 
   // validate from
   if (validator.isEmpty(data.from)) {
-    errors.from = 'From date field is required';
+    errors.from = 'From Date field is required';
   } else {
     valid.from = data.from;
   }

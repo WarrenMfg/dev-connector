@@ -23,12 +23,30 @@ export const getCurrentProfile = () => dispatch => {
 
 
 export const createOrUpdateProfile = (profileData, history) => dispatch => {
-  dispatch(setProfileLoading());
+  // dispatch(setProfileLoading());
 
   fetch('/api/profile', {
     method: 'POST',
     headers: getHeaders(),
     body: JSON.stringify(profileData)
+  })
+    .then(handleErrors)
+    .then(() => history.push('/dashboard'))
+    .catch(err => dispatch({
+      type: GET_ERRORS,
+      payload: err
+    })
+  );
+};
+
+
+export const createExperience = (experienceData, history) => dispatch => {
+  // dispatch(setProfileLoading());
+
+  fetch('/api/experience', {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(experienceData)
   })
     .then(handleErrors)
     .then(() => history.push('/dashboard'))

@@ -10,8 +10,8 @@ import { createOrUpdateProfile } from '../../actions/profileActions';
 
 
 class CreateProfile extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       displaySocialInputs: false,
       slug: '',
@@ -248,14 +248,12 @@ const getSocialInputs = (state, onChange) => {
 
 CreateProfile.propTypes = {
   slug: PropTypes.string.isRequired,
-  // profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   createOrUpdateProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   slug: state.auth.user.userName,
-  // profile: state.profile,
   errors: state.errors
 })
 
