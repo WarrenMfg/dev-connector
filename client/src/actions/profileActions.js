@@ -1,5 +1,25 @@
 import { handleErrors, getHeaders, setCurrentUser } from '../utils/utils';
-import { GET_PROFILE, PROFILE_LOADING, GET_ERRORS, CLEAR_CURRENT_PROFILE } from './types';
+import { GET_PROFILE, GET_PROFILES, PROFILE_LOADING, GET_ERRORS, CLEAR_CURRENT_PROFILE } from './types';
+
+
+export const getProfiles = () => dispatch => {
+  dispatch(setProfileLoading());
+
+  fetch('/api/profiles', {
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(data => dispatch({
+      type: GET_PROFILES,
+      payload: data
+    }))
+    .catch(() => dispatch({
+      type: GET_PROFILES,
+      payload: []
+    })
+  );
+};
 
 
 export const getCurrentProfile = () => dispatch => {

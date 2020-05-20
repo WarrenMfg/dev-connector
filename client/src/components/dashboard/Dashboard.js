@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { getCurrentProfile, deleteAccount } from '../../actions/profileActions';
 import Spinner from '../common/Spinner';
-import { isEmpty } from '../../../../backend/validation/utils';
+import { isEmpty } from '../../utils/utils';
 import ProfileButtons from './ProfileButtons';
 import Experience from './Experience';
 import Education from './Education';

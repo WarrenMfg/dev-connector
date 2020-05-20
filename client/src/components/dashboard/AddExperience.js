@@ -42,7 +42,7 @@ class AddExperience extends Component {
       location: this.state.location,
       from: this.state.from,
       to: this.state.to,
-      current: this.state.current,
+      current: (this.state.to === '' && this.state.current === false) ? true : this.state.current,
       description: this.state.description,
     };
 

@@ -15,6 +15,7 @@ import CreateProfile from './dashboard/CreateProfile';
 import EditProfile from './dashboard/EditProfile';
 import AddExperience from './dashboard/AddExperience';
 import AddEducation from './dashboard/AddEducation';
+import Profiles from './profiles/Profiles';
 
 
 // Check for token
@@ -49,6 +50,7 @@ class App extends Component {
         <div>
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/profiles" component={Profiles} />
           <Switch>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
           </Switch>

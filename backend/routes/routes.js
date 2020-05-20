@@ -88,7 +88,7 @@ const apiRouter = Router();
     .get(getOneBySlug);
 
   // many
-  apiRouter.route('/devs')
+  apiRouter.route('/profiles')
     .get(getAllProfiles);
 
 
