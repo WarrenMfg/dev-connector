@@ -70,6 +70,25 @@ export const createEducation = (educationData, history) => dispatch => {
 };
 
 
+export const deleteExperience = id => dispatch => {
+  fetch(`/api/experience/${id}`, {
+    method: 'DELETE',
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(updatedProfile => dispatch({
+      type: GET_PROFILE,
+      payload: updatedProfile
+    }))
+    .catch(err => dispatch({
+      type: GET_ERRORS,
+      payload: err
+    })
+  );
+};
+
+
 export const deleteAccount = history => dispatch => {
   if (window.confirm('Are you sure you want to delete your account?')) {
     fetch('/api/profile', {
