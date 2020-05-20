@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getCurrentProfile } from '../../actions/profileActions';
+import { Link, withRouter } from 'react-router-dom';
+import { getCurrentProfile, deleteAccount } from '../../actions/profileActions';
 import Spinner from '../common/Spinner';
 import { isEmpty } from '../../../../backend/validation/utils';
+import ProfileButtons from './ProfileButtons';
 
 
 class Dashboard extends Component {
   componentDidMount() {
     this.props.getCurrentProfile();
+  }
+
+  onDeleteClick() {
+    this.props.deleteAccount(this.props.history);
   }
 
   render() {
@@ -25,7 +30,7 @@ class Dashboard extends Component {
     } else if (isEmpty(profile)) {
       dashboardContent = (
         <div>
-          <p className="lead text-muted">Welcome { user.userName }</p>
+          <p className="lead text-muted">Welcome {user.userName}</p>
           <p>You haven't setup a profile yet.</p>
           <Link to='/create-profile' className="btn btn-lg btn-info">Create Profile</Link>
         </div>
@@ -33,7 +38,15 @@ class Dashboard extends Component {
 
     // otherwise render profile
     } else {
-      dashboardContent = <h4>TODO: DISPLAY PROFILE</h4>
+      dashboardContent = (
+        <div>
+          <p className="lead text-muted">Welcome <Link to={`/profile/${user.userName}`}>{user.userName}</Link></p>
+          <ProfileButtons />
+          {/* TODO: add exp and edu */}
+          <div style={{ marginBottom: '60px' }} />
+          <button className="btn btn-danger" onClick={this.onDeleteClick.bind(this)}>Delete My Account</button>
+        </div>
+      );
     }
 
     return (
@@ -53,6 +66,7 @@ class Dashboard extends Component {
 
 Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
+  deleteAccount: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired
 };
@@ -63,7 +77,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  getCurrentProfile
+  getCurrentProfile,
+  deleteAccount
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Dashboard));

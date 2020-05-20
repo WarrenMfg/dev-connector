@@ -1,5 +1,6 @@
-import { handleErrors, getHeaders } from '../utils/utils';
+import { handleErrors, getHeaders, setCurrentUser } from '../utils/utils';
 import { GET_PROFILE, PROFILE_LOADING, GET_ERRORS, CLEAR_CURRENT_PROFILE } from './types';
+
 
 export const getCurrentProfile = () => dispatch => {
   dispatch(setProfileLoading());
@@ -20,6 +21,7 @@ export const getCurrentProfile = () => dispatch => {
   );
 };
 
+
 export const createProfile = (profileData, history) => dispatch => {
   dispatch(setProfileLoading());
 
@@ -36,6 +38,36 @@ export const createProfile = (profileData, history) => dispatch => {
     })
   );
 };
+
+
+export const deleteAccount = history => dispatch => {
+  if (window.confirm('Are you sure you want to delete your account?')) {
+    fetch('/api/profile', {
+      method: 'DELETE',
+      headers: getHeaders(),
+    })
+      .then(handleErrors)
+      .then(() => {
+        // set current user to no user
+        dispatch(clearCurrentProfile())
+        // clear current profile
+        dispatch(setCurrentUser({}));
+        // remove local storage
+        localStorage.removeItem('token');
+        // redirect
+        history.push('/');
+      })
+      .catch(err => dispatch({
+        type: GET_ERRORS,
+        payload: err
+      })
+    );
+  }
+};
+
+
+
+
 
 export const setProfileLoading = () => ({
   type: PROFILE_LOADING

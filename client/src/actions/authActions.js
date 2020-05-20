@@ -48,7 +48,6 @@ export const logoutUser = () => dispatch => {
     headers: getHeaders()
   })
     .then(handleErrors)
-    .then(res => res.json())
     .then(() => {
       // remove local storage
       localStorage.removeItem('token');
