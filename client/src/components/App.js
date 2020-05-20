@@ -3,11 +3,13 @@ import { Route } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import store from '../store';
 import { setCurrentUser } from '../utils/utils';
+import { clearCurrentProfile } from '../actions/profileActions';
 import Navbar from './layout/Navbar';
 import Footer from './layout/Footer';
 import Landing from './layout/Landing';
 import Register from './auth/Register';
 import Login from './auth/Login';
+import Dashboard from './dashboard/Dashboard';
 
 
 // Check for token
@@ -23,8 +25,8 @@ if (localStorage.token) {
   if (decoded.exp < currentTime) {
     // Logout user
     store.dispatch(logoutUser());
-
-    // TODO: Clear current Profile
+    //
+    store.dispatch(clearCurrentProfile());
 
     // Redirect to login
     window.location.href = '/login';
@@ -42,6 +44,7 @@ class App extends React.Component {
         <div>
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/dashboard" component={Dashboard} />
         </div>
 
         <Footer />
