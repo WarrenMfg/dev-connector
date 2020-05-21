@@ -1,7 +1,7 @@
 import { GET_POST, GET_POSTS, ADD_POST, DELETE_POST, POST_LOADING, GET_ERRORS } from '../actions/types';
 import { handleErrors, getHeaders } from '../utils/utils';
 
-export const addPost = postData => dispatch => {
+export const addPost = (postData, clearForm) => dispatch => {
   fetch('/api/post', {
     method: 'POST',
     headers: getHeaders(),
@@ -9,10 +9,14 @@ export const addPost = postData => dispatch => {
   })
     .then(handleErrors)
     .then(res => res.json())
-    .then(post => dispatch({
-      type: ADD_POST,
-      payload: post
-    }))
+    .then(post => {
+      console.log(post);
+      dispatch({
+        type: ADD_POST,
+        payload: post
+      });
+      clearForm();
+  })
     .catch(err => dispatch({
       type: GET_ERRORS,
       payload: err
