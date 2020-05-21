@@ -20,6 +20,7 @@ import {
   createEducation,
   deleteEducation,
   getOneBySlug,
+  getGitHubRepos,
   getAllProfiles
 } from './api/profile';
 import {
@@ -86,6 +87,9 @@ const apiRouter = Router();
   // one
   apiRouter.route('/profile/:slug')
     .get(getOneBySlug);
+
+  apiRouter.route('/githubRepos/:githubUserName')
+    .get(getGitHubRepos);
 
   // many
   apiRouter.route('/profiles')

@@ -2,6 +2,8 @@ import Profile from '../../models/Profile';
 import profileValidation from '../../validation/profile';
 import experienceValidation from '../../validation/experience';
 import educationValidation from '../../validation/education';
+import axios from 'axios';
+import { githubAuthToken } from '../../config/config';
 
 
 export const currentUserProfile = async (req, res) => {
@@ -122,6 +124,28 @@ export const getOneBySlug = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+};
+
+
+export const getGitHubRepos = (req, res) => {
+  const { githubUserName } = req.params;
+  const count = 5;
+  const sort = 'updated';
+  const direction = 'desc';
+
+  axios.get(`https://api.github.com/users/${githubUserName}/repos?per_page=${count}&sort=${sort}&direction=${direction}`, {
+    headers: {
+      'Authorization': `token ${githubAuthToken}`,
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(repos => {
+      res.set({
+        'Cache-Control': 'public, max-age=3600'
+      });
+      res.send(repos.data);
+    })
+    .catch(err => console.log(err.message));
 };
 
 

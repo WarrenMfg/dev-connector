@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { client_id, client_secret } from '../config/config';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
@@ -8,11 +7,6 @@ class ProfileGitHub extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      client_id,
-      client_secret,
-      count: 5,
-      sort: 'updated',
-      direction: 'desc', // default when sort is not 'full_name'
       repos: []
     };
     this.githubRef = React.createRef();
@@ -20,8 +14,8 @@ class ProfileGitHub extends Component {
 
   componentDidMount() {
     const { githubUserName } = this.props;
-    const { client_id, client_secret, count, sort, direction } = this.state;
-    fetch(`https://api.github.com/users/${githubUserName}/repos?per_page=${count}&sort=${sort}&direction=${direction}&client_id=${client_id}&client_secret=${client_secret}`)
+
+    fetch(`/api/githubRepos/${githubUserName}`)
       .then(res => res.json())
       .then(repos => {
         // if component is still mounted, then update state
@@ -39,7 +33,7 @@ class ProfileGitHub extends Component {
       <div key={repo.id} className="card card-body mb-2">
         <div className="row">
           <div className="col-md-6">
-            <h4><Link to={repo.html_url} className="text-info" target="_blank">{repo.name}</Link></h4>
+            <h4><a href={repo.html_url} className="text-info" target="_blank">{repo.name}</a></h4>
             <p>{repo.description}</p>
           </div>
           <div className="col-md-6">
