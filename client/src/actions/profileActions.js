@@ -176,7 +176,7 @@ export const deleteAccount = history => dispatch => {
 
 
 
-export const setProfileLoading = () => ({
+const setProfileLoading = () => ({
   type: PROFILE_LOADING
 });
 

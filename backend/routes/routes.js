@@ -101,35 +101,35 @@ const apiRouter = Router();
   // one (PRIVATE)
   apiRouter.route('/post')
     .all(loginRequired)
-    .post(validatePostInput, createPost)
+    .post(validatePostInput, createPost);
 
   // one (PRIVATE)
   apiRouter.route('/post/like/:_id')
     .all(loginRequired)
-    .post(likeOrUnlikePost)
+    .post(likeOrUnlikePost);
 
   // one (PRIVATE)
   apiRouter.route('/post/comment/:_id')
     .all(loginRequired)
-    .post(validateCommentInput, addComment)
+    .post(validateCommentInput, addComment);
 
   // one (PRIVATE)
   apiRouter.route('/post/comment/:post_id/:comment_id')
     .all(loginRequired)
-    .delete(deleteComment)
+    .delete(deleteComment);
 
   // one (PRIVATE)
   apiRouter.route('/post/:_id')
     .all(loginRequired)
-    .delete(deletePost)
+    .delete(deletePost);
 
   // one (PUBLIC)
   apiRouter.route('/post/:_id')
-    .get(getPost)
+    .get(getPost);
 
   // many (PUBLIC)
   apiRouter.route('/posts')
-    .get(getPosts)
+    .get(getPosts);
 
 
 

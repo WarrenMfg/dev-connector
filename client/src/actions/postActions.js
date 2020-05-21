@@ -10,7 +10,6 @@ export const addPost = (postData, clearForm) => dispatch => {
     .then(handleErrors)
     .then(res => res.json())
     .then(post => {
-      console.log(post);
       dispatch({
         type: ADD_POST,
         payload: post
@@ -22,3 +21,50 @@ export const addPost = (postData, clearForm) => dispatch => {
       payload: err
     }))
 };
+
+
+export const getPosts = () => dispatch => {
+  dispatch(setPostLoading());
+
+  fetch('/api/posts', {
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(posts => {
+      console.log(posts)
+      dispatch({
+        type: GET_POSTS,
+        payload: posts
+      });
+  })
+    .catch(() => dispatch({
+      type: GET_POSTS,
+      payload: []
+    }))
+};
+
+// IN PROGRESS
+export const deletePost = id => dispatch => {
+  fetch('/api/posts', {
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(posts => {
+      console.log(posts)
+      dispatch({
+        type: GET_POSTS,
+        payload: posts
+      });
+  })
+    .catch(() => dispatch({
+      type: GET_POSTS,
+      payload: []
+    }))
+};
+
+
+const setPostLoading = () => ({
+  type: POST_LOADING
+});
