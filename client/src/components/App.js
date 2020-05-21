@@ -19,6 +19,7 @@ import Profiles from './profiles/Profiles';
 import Profile from './profiles/Profile';
 import NotFound from '../components/404/NotFound';
 import Posts from './posts/Posts';
+import Post from './posts/Post';
 
 
 // Check for token
@@ -72,6 +73,9 @@ class App extends Component {
           </Switch>
           <Switch>
             <PrivateRoute exact path="/connect" component={Posts} />
+          </Switch>
+          <Switch>
+            <PrivateRoute exact path="/post/:id" component={Post} />
           </Switch>
           <Route exact path="/not-found" component={NotFound} />
         </div>

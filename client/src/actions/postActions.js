@@ -42,6 +42,25 @@ export const getPosts = () => dispatch => {
 };
 
 
+export const getPost = id => dispatch => {
+  dispatch(setPostLoading());
+
+  fetch(`/api/post/${id}`, {
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(post => dispatch({
+      type: GET_POST,
+      payload: post
+    }))
+    .catch(() => dispatch({
+      type: GET_POST,
+      payload: {}
+    }));
+};
+
+
 export const deletePost = id => dispatch => {
   fetch(`/api/post/${id}`, {
     method: 'DELETE',
