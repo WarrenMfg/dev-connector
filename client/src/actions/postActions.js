@@ -1,4 +1,4 @@
-import { GET_POST, GET_POSTS, ADD_POST, UPDATE_LIKES, DELETE_POST, POST_LOADING, GET_ERRORS } from '../actions/types';
+import { GET_POST, GET_POSTS, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING, GET_ERRORS } from '../actions/types';
 import { handleErrors, getHeaders } from '../utils/utils';
 
 export const addPost = (postData, clearForm) => dispatch => {
@@ -13,6 +13,28 @@ export const addPost = (postData, clearForm) => dispatch => {
       dispatch({
         type: ADD_POST,
         payload: post
+      });
+      clearForm();
+  })
+    .catch(err => dispatch({
+      type: GET_ERRORS,
+      payload: err
+    }));
+};
+
+
+export const addComment = (postID, newComment, clearForm) => dispatch => {
+  fetch(`/api/post/comment/${postID}`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(newComment)
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(updatedPost => {
+      dispatch({
+        type: UPDATE_COMMENTS,
+        payload: updatedPost
       });
       clearForm();
   })

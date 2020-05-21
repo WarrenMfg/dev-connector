@@ -6,6 +6,7 @@ import Spinner from '../common/Spinner';
 import { getPost } from '../../actions/postActions';
 import PostItem from '../posts/PostItem';
 import { isEmpty } from '../../utils/utils';
+import PostCommentForm from './PostCommentForm';
 
 
 class Post extends Component {
@@ -20,7 +21,12 @@ class Post extends Component {
     if (isEmpty(post) || loading) {
       postContent = <Spinner />;
     } else {
-      postContent = <PostItem post={post} showActions={false} />;
+      postContent = (
+        <div>
+          <PostItem post={post} showActions={false} />
+          <PostCommentForm postID={post._id} />
+        </div>
+      );
     }
 
     return (
@@ -28,7 +34,7 @@ class Post extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <Link to='/feed' className="btn btn-light mb-3">Back</Link>
+              <Link to='/connect' className="btn btn-light mb-3">Back</Link>
               {postContent}
             </div>
           </div>
