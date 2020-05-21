@@ -32,14 +32,14 @@ export class Profile extends Component {
 
           <div className="row">
             <div className="col-md-6">
-              <Link to='/profiles' className="btn btn-light mb-3 float-left">Go Back</Link>
+              <Link to='/profiles' className="btn btn-light mb-3 float-left">Developer Profiles</Link>
               <div className="col-md6"></div>
             </div>
           </div>
 
           <ProfileHeader profile={profile} />
-          <ProfileAbout />
-          <ProfileExpEdu />
+          <ProfileAbout profile={profile} />
+          <ProfileExpEdu education={profile.education} experience={profile.experience} />
           <ProfileGitHub />
 
         </div>

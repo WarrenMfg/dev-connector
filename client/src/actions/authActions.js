@@ -42,7 +42,7 @@ export const loginUser = userData => dispatch => {
 };
 
 // LOGOUT
-export const logoutUser = () => dispatch => {
+export const logoutUser = history => dispatch => {
   fetch('/api/logout', {
     method: 'PUT',
     headers: getHeaders()
@@ -53,6 +53,8 @@ export const logoutUser = () => dispatch => {
       localStorage.removeItem('token');
       // set current user to no user
       dispatch(setCurrentUser({}));
+      // redirect to '/'
+      history.push('/');
     })
     .catch(err => dispatch({
       type: GET_ERRORS,
