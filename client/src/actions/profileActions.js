@@ -42,6 +42,26 @@ export const getCurrentProfile = () => dispatch => {
 };
 
 
+export const getProfileBySlug = slug => dispatch => {
+  dispatch(setProfileLoading());
+
+  fetch(`/api/profile/${slug}`, {
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(data => dispatch({
+      type: GET_PROFILE,
+      payload: data
+    }))
+    .catch(() => dispatch({
+      type: GET_PROFILE,
+      payload: null
+    })
+  );
+};
+
+
 export const createOrUpdateProfile = (profileData, history) => dispatch => {
   fetch('/api/profile', {
     method: 'POST',
