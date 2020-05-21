@@ -19,7 +19,7 @@ export const addPost = (postData, clearForm) => dispatch => {
     .catch(err => dispatch({
       type: GET_ERRORS,
       payload: err
-    }))
+    }));
 };
 
 
@@ -31,37 +31,34 @@ export const getPosts = () => dispatch => {
   })
     .then(handleErrors)
     .then(res => res.json())
-    .then(posts => {
-      console.log(posts)
-      dispatch({
-        type: GET_POSTS,
-        payload: posts
-      });
-  })
+    .then(posts => dispatch({
+      type: GET_POSTS,
+      payload: posts
+    }))
     .catch(() => dispatch({
       type: GET_POSTS,
       payload: []
-    }))
+    }));
 };
 
-// IN PROGRESS
+
 export const deletePost = id => dispatch => {
-  fetch('/api/posts', {
+  fetch(`/api/post/${id}`, {
+    method: 'DELETE',
     headers: getHeaders()
   })
     .then(handleErrors)
     .then(res => res.json())
-    .then(posts => {
-      console.log(posts)
+    .then(() => {
       dispatch({
-        type: GET_POSTS,
-        payload: posts
+        type: DELETE_POST,
+        payload: id
       });
-  })
-    .catch(() => dispatch({
-      type: GET_POSTS,
-      payload: []
-    }))
+    })
+    .catch(err => dispatch({
+      type: GET_ERRORS,
+      payload: err
+    }));
 };
 
 
