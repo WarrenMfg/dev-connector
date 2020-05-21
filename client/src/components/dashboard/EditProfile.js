@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Spinner from '../common/Spinner';
 import { isEmpty } from '../../utils/utils';
@@ -313,4 +313,4 @@ const mapDispatchToProps = {
   getCurrentProfile
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditProfile));
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);

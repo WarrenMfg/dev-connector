@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Spinner from '../common/Spinner';
-import { isEmpty } from '../../utils/utils';
 import ProfileHeader from './ProfileHeader';
 import ProfileAbout from './ProfileAbout';
 import ProfileExpEdu from './ProfileExpEdu';
@@ -18,14 +17,19 @@ export class Profile extends Component {
     }
   }
 
+  componentDidUpdate() {
+    const { profile } = this.props.profile;
+    if (profile?.noProfile) {
+      this.props.history.push('/not-found');
+    }
+  }
+
   render() {
     const { profile, loading } = this.props.profile;
     let profileContent;
 
-    if (profile === null || loading) {
+    if (profile === null || loading || profile?.noProfile) {
       profileContent = <Spinner />;
-    } else if (isEmpty(profile)) {
-      profileContent = <h4>No profile found...</h4>;
     } else {
       profileContent = (
         <div>

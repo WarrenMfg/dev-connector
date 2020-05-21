@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
@@ -159,4 +159,4 @@ const mapDispatchToProps = {
   createExperience
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddExperience));
+export default connect(mapStateToProps, mapDispatchToProps)(AddExperience);

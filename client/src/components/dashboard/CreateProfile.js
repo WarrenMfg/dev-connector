@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
@@ -262,4 +261,4 @@ const mapDispatchToProps = {
   createOrUpdateProfile
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreateProfile))
+export default connect(mapStateToProps, mapDispatchToProps)(CreateProfile);

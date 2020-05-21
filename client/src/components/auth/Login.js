@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import TextFieldGroup from '../common/TextFieldGroup';
-import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions/authActions';
@@ -111,4 +110,4 @@ const mapDispatchToProps = {
   loginUser
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

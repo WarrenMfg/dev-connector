@@ -54,11 +54,10 @@ export const getProfileBySlug = slug => dispatch => {
       type: GET_PROFILE,
       payload: data
     }))
-    .catch(() => dispatch({
+    .catch(err => dispatch({
       type: GET_PROFILE,
-      payload: {}
-    })
-  );
+      payload: err
+    }));
 };
 
 

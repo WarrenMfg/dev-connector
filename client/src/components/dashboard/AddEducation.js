@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
@@ -42,7 +42,7 @@ class AddEducation extends Component {
       fieldOfStudy: this.state.fieldOfStudy,
       from: this.state.from,
       to: this.state.to,
-      current: this.state.current,
+      current: (this.state.to === '' && this.state.current === false) ? true : this.state.current,
       description: this.state.description,
     };
 
@@ -159,4 +159,4 @@ const mapDispatchToProps = {
   createEducation
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddEducation));
+export default connect(mapStateToProps, mapDispatchToProps)(AddEducation);
