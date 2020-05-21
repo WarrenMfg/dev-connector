@@ -1,4 +1,4 @@
-import { GET_POST, GET_POSTS, ADD_POST, DELETE_POST, POST_LOADING, GET_ERRORS } from '../actions/types';
+import { GET_POST, GET_POSTS, ADD_POST, UPDATE_LIKES, DELETE_POST, POST_LOADING, GET_ERRORS } from '../actions/types';
 import { handleErrors, getHeaders } from '../utils/utils';
 
 export const addPost = (postData, clearForm) => dispatch => {
@@ -53,6 +53,26 @@ export const deletePost = id => dispatch => {
       dispatch({
         type: DELETE_POST,
         payload: id
+      });
+    })
+    .catch(err => dispatch({
+      type: GET_ERRORS,
+      payload: err
+    }));
+};
+
+
+export const likeOrUnlikePost = id => dispatch => {
+  fetch(`/api/post/like/${id}`, {
+    method: 'POST',
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(updatedPost => {
+      dispatch({
+        type: UPDATE_LIKES,
+        payload: updatedPost
       });
     })
     .catch(err => dispatch({

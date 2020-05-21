@@ -2,12 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deletePost } from '../../actions/postActions'
+import { deletePost, likeOrUnlikePost } from '../../actions/postActions';
 
 
 class PostItem extends Component {
   onDelete(id) {
     this.props.deletePost(id);
+  }
+
+  onLikeOrUnlike(id) {
+    this.props.likeOrUnlikePost(id);
+  }
+
+  didUserLikePost(likes) {
+    const { user } = this.props.auth;
+    return likes.some(like => like.user === user._id);
   }
 
   render() {
@@ -34,8 +43,8 @@ class PostItem extends Component {
           <div className="col-md-10">
             <p className="lead">{post.text}</p>
 
-            <button type="button" className="btn btn-light mr-1">
-              <i className="text-info fas fa-thumbs-up"></i>
+            <button onClick={this.onLikeOrUnlike.bind(this, post._id)} type="button" className="btn btn-light mr-1">
+              <i className={`fas fa-thumbs-up ${this.didUserLikePost.bind(this)(post.likes) && 'text-info'}`}></i>
               <span className="badge badge-light">{post.likes.length}</span>
             </button>
 
@@ -52,7 +61,8 @@ class PostItem extends Component {
 PostItem.propTypes = {
   post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-  deletePost: PropTypes.func.isRequired
+  deletePost: PropTypes.func.isRequired,
+  likeOrUnlikePost: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -60,7 +70,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  deletePost
+  deletePost,
+  likeOrUnlikePost
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItem);
