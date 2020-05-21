@@ -56,7 +56,7 @@ export const getProfileBySlug = slug => dispatch => {
     }))
     .catch(() => dispatch({
       type: GET_PROFILE,
-      payload: null
+      payload: {}
     })
   );
 };

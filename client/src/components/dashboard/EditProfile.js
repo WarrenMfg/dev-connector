@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Spinner from '../common/Spinner';
+import { isEmpty } from '../../utils/utils';
 import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
@@ -83,116 +85,125 @@ class EditProfile extends Component {
 
   render() {
     const { displaySocialInputs, errors } = this.state;
+    const { profile, loading } = this.props.profile;
 
-    return (
-      <div className='create-profile'>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-8 m-auto">
-              <Link to="/dashboard" className="btn btn-light">Go Back</Link>
-              <h1 className="display-4 text-center">Edit Your Profile</h1>
-              <p className="lead text-center">Make your profile standout!</p>
+    if (profile === null || loading) {
+      return <Spinner />;
 
-              <form onSubmit={this.onSubmit}>
-                <TextFieldGroup
-                  name='slug'
-                  value={this.props.slug}
-                  error={errors.slug}
-                  info='Your unique profile URL'
-                  onChange={() => {}}
-                  disabled={'disabled'}
-                />
+    } else if (isEmpty(profile)) {
+      return <h4>No profile found...</h4>;
 
-                <SelectListGroup
-                  name='status'
-                  value={this.state.status}
-                  error={errors.status}
-                  info='Your career stage (required)'
-                  onChange={this.onChange}
-                  options={getOptions()}
-                />
+    } else {
+      return (
+        <div className='create-profile'>
+          <div className="container">
+            <div className="row">
+              <div className="col-md-8 m-auto">
+                <Link to="/dashboard" className="btn btn-light">Go Back</Link>
+                <h1 className="display-4 text-center">Edit Your Profile</h1>
+                <p className="lead text-center">Make your profile standout!</p>
 
-                <TextFieldGroup
-                  name='company'
-                  placeholder='Company'
-                  value={this.state.company}
-                  error={errors.company}
-                  info='Your current employer'
-                  onChange={this.onChange}
-                />
+                <form onSubmit={this.onSubmit}>
+                  <TextFieldGroup
+                    name='slug'
+                    value={this.props.slug}
+                    error={errors.slug}
+                    info='Your unique profile URL'
+                    onChange={() => {}}
+                    disabled={'disabled'}
+                  />
 
-                <TextFieldGroup
-                  name='website'
-                  placeholder='Website'
-                  value={this.state.website}
-                  error={errors.website}
-                  info='Your portfolio website'
-                  onChange={this.onChange}
-                />
+                  <SelectListGroup
+                    name='status'
+                    value={this.state.status}
+                    error={errors.status}
+                    info='Your career stage (required)'
+                    onChange={this.onChange}
+                    options={getOptions()}
+                  />
 
-                <TextFieldGroup
-                  name='location'
-                  placeholder='Location'
-                  value={this.state.location}
-                  error={errors.location}
-                  info='City &amp; State'
-                  onChange={this.onChange}
-                />
+                  <TextFieldGroup
+                    name='company'
+                    placeholder='Company'
+                    value={this.state.company}
+                    error={errors.company}
+                    info='Your current employer'
+                    onChange={this.onChange}
+                  />
 
-                <TextFieldGroup
-                  name='skills'
-                  placeholder='Skills'
-                  value={this.state.skills}
-                  error={errors.skills}
-                  info='Comma separated list of skills (required)'
-                  onChange={this.onChange}
-                />
+                  <TextFieldGroup
+                    name='website'
+                    placeholder='Website'
+                    value={this.state.website}
+                    error={errors.website}
+                    info='Your portfolio website'
+                    onChange={this.onChange}
+                  />
 
-                <TextFieldGroup
-                  name='githubUserName'
-                  placeholder='GitHub Username'
-                  value={this.state.githubUserName}
-                  error={errors.githubUserName}
-                  info='Include your GitHub username to show your latest repos'
-                  onChange={this.onChange}
-                />
+                  <TextFieldGroup
+                    name='location'
+                    placeholder='Location'
+                    value={this.state.location}
+                    error={errors.location}
+                    info='City &amp; State'
+                    onChange={this.onChange}
+                  />
 
-                <TextAreaFieldGroup
-                  name='bio'
-                  placeholder='A Short biography'
-                  value={this.state.bio}
-                  error={errors.bio}
-                  info='Tell everyone about yourself'
-                  onChange={this.onChange}
-                />
+                  <TextFieldGroup
+                    name='skills'
+                    placeholder='Skills'
+                    value={this.state.skills}
+                    error={errors.skills}
+                    info='Comma separated list of skills (required)'
+                    onChange={this.onChange}
+                  />
 
-                <div className="mb-3">
-                  <button
-                    onClick={() => this.setState(prevState => ({
-                      displaySocialInputs: !prevState.displaySocialInputs
-                    }))}
-                    type='button'
-                    className="btn btn-light"
-                  >
-                    Add Social Network Links
-                  </button>
-                  <span className="text-muted">{' '}Optional</span>
-                </div>
+                  <TextFieldGroup
+                    name='githubUserName'
+                    placeholder='GitHub Username'
+                    value={this.state.githubUserName}
+                    error={errors.githubUserName}
+                    info='Include your GitHub username to show your latest repos'
+                    onChange={this.onChange}
+                  />
 
-                {displaySocialInputs && getSocialInputs(this.state, this.onChange)}
+                  <TextAreaFieldGroup
+                    name='bio'
+                    placeholder='A Short biography'
+                    value={this.state.bio}
+                    error={errors.bio}
+                    info='Tell everyone about yourself'
+                    onChange={this.onChange}
+                  />
 
-                <input
-                  type="submit"
-                  value='Update'
-                  className='btn btn-info btn-block mt-4'
-                />
-              </form>
+                  <div className="mb-3">
+                    <button
+                      onClick={() => this.setState(prevState => ({
+                        displaySocialInputs: !prevState.displaySocialInputs
+                      }))}
+                      type='button'
+                      className="btn btn-light"
+                    >
+                      Add Social Network Links
+                    </button>
+                    <span className="text-muted">{' '}Optional</span>
+                  </div>
 
+                  {displaySocialInputs && getSocialInputs(this.state, this.onChange)}
+
+                  <input
+                    type="submit"
+                    value='Update'
+                    className='btn btn-info btn-block mt-4'
+                  />
+                </form>
+
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 
