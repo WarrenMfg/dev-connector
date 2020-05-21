@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { isEmpty } from '../../utils/utils';
 
 
@@ -64,5 +65,9 @@ class ProfileHeader extends Component {
     );
   }
 }
+
+ProfileHeader.propTypes = {
+  profile: PropTypes.object.isRequired
+};
 
 export default ProfileHeader;
