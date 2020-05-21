@@ -7,6 +7,7 @@ import { getPost } from '../../actions/postActions';
 import PostItem from '../posts/PostItem';
 import { isEmpty } from '../../utils/utils';
 import PostCommentForm from './PostCommentForm';
+import CommentFeed from './CommentFeed';
 
 
 class Post extends Component {
@@ -25,6 +26,7 @@ class Post extends Component {
         <div>
           <PostItem post={post} showActions={false} />
           <PostCommentForm postID={post._id} />
+          <CommentFeed comments={post.comments} postID={post._id} />
         </div>
       );
     }

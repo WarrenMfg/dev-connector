@@ -1,7 +1,9 @@
-import { GET_POST, GET_POSTS, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING, GET_ERRORS } from '../actions/types';
+import { GET_POST, GET_POSTS, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING, GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
 import { handleErrors, getHeaders } from '../utils/utils';
 
 export const addPost = (postData, clearForm) => dispatch => {
+  dispatch(clearErrors());
+
   fetch('/api/post', {
     method: 'POST',
     headers: getHeaders(),
@@ -24,6 +26,8 @@ export const addPost = (postData, clearForm) => dispatch => {
 
 
 export const addComment = (postID, newComment, clearForm) => dispatch => {
+  dispatch(clearErrors());
+
   fetch(`/api/post/comment/${postID}`, {
     method: 'POST',
     headers: getHeaders(),
@@ -103,6 +107,26 @@ export const deletePost = id => dispatch => {
 };
 
 
+export const deleteComment = (postID, commentID) => dispatch => {
+  fetch(`/api/post/comment/${postID}/${commentID}`, {
+    method: 'DELETE',
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(updatedPost => {
+      dispatch({
+        type: UPDATE_COMMENTS,
+        payload: updatedPost
+      });
+    })
+    .catch(err => dispatch({
+      type: GET_ERRORS,
+      payload: err
+    }));
+};
+
+
 export const likeOrUnlikePost = id => dispatch => {
   fetch(`/api/post/like/${id}`, {
     method: 'POST',
@@ -125,4 +149,8 @@ export const likeOrUnlikePost = id => dispatch => {
 
 const setPostLoading = () => ({
   type: POST_LOADING
+});
+
+const clearErrors = () => ({
+  type: CLEAR_ERRORS
 });

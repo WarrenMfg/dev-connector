@@ -13,6 +13,7 @@ export const UPDATE_LIKES = 'UPDATE_LIKES';
 export const UPDATE_COMMENTS = 'UPDATE_COMMENTS';
 export const DELETE_POST = 'DELETE_POST';
 export const POST_LOADING = 'POST_LOADING';
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 
 
