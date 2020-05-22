@@ -12,7 +12,7 @@ export const currentUserProfile = async (req, res) => {
 
     // if no profile created yet, or could not be found
     if (!profile) {
-      return res.status(204).json({ noProfile: true, message: 'Profile not yet created or could not be found.' });
+      return res.json({ noProfile: true, message: 'Profile not yet created or could not be found.' });
     }
 
     return res.send(profile);

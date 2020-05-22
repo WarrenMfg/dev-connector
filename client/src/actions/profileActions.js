@@ -1,5 +1,10 @@
 import { handleErrors, getHeaders, setCurrentUser } from '../utils/utils';
-import { GET_PROFILE, GET_PROFILES, PROFILE_LOADING, GET_ERRORS, CLEAR_CURRENT_PROFILE } from './types';
+import {
+  GET_PROFILE,
+  GET_PROFILES,
+  PROFILE_LOADING,
+  GET_ERRORS,
+  CLEAR_CURRENT_PROFILE } from './types';
 
 
 export const getProfiles = () => dispatch => {
@@ -30,13 +35,16 @@ export const getCurrentProfile = () => dispatch => {
   })
     .then(handleErrors)
     .then(res => res.json())
-    .then(data => dispatch({
+    .then(profile => {
+      if (profile.noProfile) throw {};
+      dispatch({
+        type: GET_PROFILE,
+        payload: profile
+      })
+    })
+    .catch(none => dispatch({
       type: GET_PROFILE,
-      payload: data
-    }))
-    .catch(() => dispatch({
-      type: GET_PROFILE,
-      payload: {}
+      payload: none
     })
   );
 };
