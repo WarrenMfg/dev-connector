@@ -4,13 +4,25 @@ import { connect } from 'react-redux';
 import PostForm from './PostForm';
 import Spinner from '../common/Spinner';
 import PostFeed from './PostFeed';
-import { getPosts } from '../../actions/postActions';
+import { getPosts, getPostsAndCompareFirstComment } from '../../actions/postActions';
 import { isEmpty } from '../../utils/utils'
 
 
 class Connect extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      intervalID: null
+    };
+  }
+
   componentDidMount() {
     this.props.getPosts();
+    this.setState({ intervalID: setInterval(() => this.props.getPostsAndCompareFirstComment(), 3000) })
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.intervalID);
   }
 
   render() {
@@ -42,7 +54,8 @@ class Connect extends Component {
 
 Connect.propTypes = {
   post: PropTypes.object.isRequired,
-  getPosts: PropTypes.func.isRequired
+  getPosts: PropTypes.func.isRequired,
+  getPostsAndCompareFirstComment: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -50,7 +63,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  getPosts
+  getPosts,
+  getPostsAndCompareFirstComment
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Connect);

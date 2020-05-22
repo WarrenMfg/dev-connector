@@ -1,4 +1,4 @@
-import { GET_POST, GET_POST_AND_COMPARE_COMMENTS, GET_POSTS, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING, GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
+import { GET_POST, GET_POST_AND_COMPARE_COMMENTS, GET_POSTS, GET_POSTS_COMPARE_FIRST_COMMENT, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING, GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
 import { handleErrors, getHeaders } from '../utils/utils';
 
 export const addPost = (postData, clearForm) => dispatch => {
@@ -59,6 +59,23 @@ export const getPosts = () => dispatch => {
     .then(res => res.json())
     .then(posts => dispatch({
       type: GET_POSTS,
+      payload: posts
+    }))
+    .catch(() => dispatch({
+      type: GET_POSTS,
+      payload: []
+    }));
+};
+
+
+export const getPostsAndCompareFirstComment = () => dispatch => {
+  fetch('/api/posts', {
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(posts => dispatch({
+      type: GET_POSTS_COMPARE_FIRST_COMMENT,
       payload: posts
     }))
     .catch(() => dispatch({
