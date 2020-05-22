@@ -27,7 +27,7 @@ class ProfileCard extends Component {
           <div className="col-md-4 d-none d-md-block">
             <h4>Skills</h4>
             <ul className="list-group">
-              {profile.skills.slice(0,4).map((skill, i) => (
+              {profile.skills.slice(0,3).map((skill, i) => (
                 <li key={i} className="list-group-item">
                   <i className="fa fa-check pr-1" />{skill}
                 </li>))
