@@ -7,7 +7,6 @@ export const GET_PROFILES = 'GET_PROFILES';
 
 
 export const GET_POST = 'GET_POST';
-// export const GET_POST_FOR_LATEST_COMMENTS = 'GET_POST_FOR_LATEST_COMMENTS';
 export const GET_POSTS = 'GET_POSTS';
 export const GET_MORE_POSTS = 'GET_MORE_POSTS';
 export const GET_LATEST_POSTS = 'GET_LATEST_POSTS';

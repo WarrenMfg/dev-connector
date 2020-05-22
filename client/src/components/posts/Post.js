@@ -24,12 +24,6 @@ class Post extends Component {
     }, 3000) });
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.post.post !== prevProps.post.post) {
-  //     console.log(prevProps.post.post, this.props.post.post);
-  //   }
-  // }
-
   componentWillUnmount() {
     clearInterval(this.state.intervalID);
   }

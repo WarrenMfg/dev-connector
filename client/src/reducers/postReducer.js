@@ -1,6 +1,5 @@
 import {
   GET_POST,
-  // GET_POST_FOR_LATEST_COMMENTS,
   GET_POSTS,
   GET_MORE_POSTS,
   GET_LATEST_POSTS,
@@ -64,12 +63,6 @@ export default (state = initialState, action) => {
         post: isEmpty(action.payload) ? state.post : Object.assign(state.post, action.payload),
         loading: false
       };
-    // case GET_POST_FOR_LATEST_COMMENTS:
-    //   return {
-    //     ...state,
-    //     // if true that comment IDs are equal, return state.post; else return action.payload
-    //     post: state.post.comments.every((comment, i) => comment._id === action.payload.comments[i]._id) ? state.post : action.payload
-    //   };
     case DELETE_POST:
       return {
         ...state,
