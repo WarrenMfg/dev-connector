@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from '../common/Spinner';
-import { getPost } from '../../actions/postActions';
+import { getPost, getPostAndCompareComments } from '../../actions/postActions';
 import PostItem from '../posts/PostItem';
 import { isEmpty } from '../../utils/utils';
 import PostCommentForm from './PostCommentForm';
@@ -11,8 +11,21 @@ import CommentFeed from './CommentFeed';
 
 
 class Post extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      intervalID: null
+    };
+  }
   componentDidMount() {
     this.props.getPost(this.props.match.params.id);
+    this.setState({ intervalID: setInterval(() => {
+      this.props.getPostAndCompareComments(this.props.match.params.id);
+    }, 3000) });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.intervalID);
   }
 
   render() {
@@ -48,7 +61,8 @@ class Post extends Component {
 
 Post.propTypes = {
   post: PropTypes.object.isRequired,
-  getPost: PropTypes.func.isRequired
+  getPost: PropTypes.func.isRequired,
+  getPostAndCompareComments: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -56,7 +70,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  getPost
+  getPost,
+  getPostAndCompareComments
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

@@ -1,4 +1,4 @@
-import { GET_POST, GET_POSTS, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING, GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
+import { GET_POST, GET_POST_AND_COMPARE_COMMENTS, GET_POSTS, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING, GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
 import { handleErrors, getHeaders } from '../utils/utils';
 
 export const addPost = (postData, clearForm) => dispatch => {
@@ -78,6 +78,23 @@ export const getPost = id => dispatch => {
     .then(res => res.json())
     .then(post => dispatch({
       type: GET_POST,
+      payload: post
+    }))
+    .catch(() => dispatch({
+      type: GET_POST,
+      payload: {}
+    }));
+};
+
+
+export const getPostAndCompareComments = id => dispatch => {
+  fetch(`/api/post/${id}`, {
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(post => dispatch({
+      type: GET_POST_AND_COMPARE_COMMENTS,
       payload: post
     }))
     .catch(() => dispatch({

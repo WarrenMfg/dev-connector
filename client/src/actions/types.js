@@ -7,6 +7,7 @@ export const GET_PROFILES = 'GET_PROFILES';
 
 
 export const GET_POST = 'GET_POST';
+export const GET_POST_AND_COMPARE_COMMENTS = 'GET_POST_AND_COMPARE_COMMENTS';
 export const GET_POSTS = 'GET_POSTS';
 export const ADD_POST = 'ADD_POST';
 export const UPDATE_LIKES = 'UPDATE_LIKES';

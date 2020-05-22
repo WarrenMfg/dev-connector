@@ -1,4 +1,4 @@
-import { GET_POST, GET_POSTS, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING } from '../actions/types';
+import { GET_POST, GET_POST_AND_COMPARE_COMMENTS, GET_POSTS, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING } from '../actions/types';
 
 const initialState = {
   post: {},
@@ -40,6 +40,12 @@ export default (state = initialState, action) => {
         ...state,
         post: action.payload,
         loading: false
+      };
+    case GET_POST_AND_COMPARE_COMMENTS:
+      return {
+        ...state,
+        // if true that comment IDs are equal, return state.post; else return action.payload
+        post: state.post.comments.every((comment, i) => comment._id === action.payload.comments[i]._id) ? state.post : action.payload
       };
     case DELETE_POST:
       return {
