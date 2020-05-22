@@ -42,6 +42,14 @@ img {
   position: relative;
 }
 
-.register, .login, .profiles, .profile, .dashboard, .connect, .create-profile, .edit-profile {
+.register,
+.login,
+.profiles,
+.profile,
+.dashboard,
+.connect,
+.create-profile,
+.edit-profile,
+.not-found {
   min-height: calc(100vh - 80px - 120px);
 }

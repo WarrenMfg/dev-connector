@@ -49,35 +49,26 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
-        <Route exact path="/"component={Landing} />
 
         <div>
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/profiles" component={Profiles} />
-          <Route exact path="/profile/:slug" component={Profile} />
           <Switch>
+            <Route exact path="/"component={Landing} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/profiles" component={Profiles} />
+            <Route exact path="/profile/:slug" component={Profile} />
+
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
-          </Switch>
-          <Switch>
             <PrivateRoute exact path="/create-profile" component={CreateProfile} />
-          </Switch>
-          <Switch>
             <PrivateRoute exact path="/edit-profile" component={EditProfile} />
-          </Switch>
-          <Switch>
             <PrivateRoute exact path="/add-experience" component={AddExperience} />
-          </Switch>
-          <Switch>
             <PrivateRoute exact path="/add-education" component={AddEducation} />
-          </Switch>
-          <Switch>
             <PrivateRoute exact path="/connect" component={Connect} />
-          </Switch>
-          <Switch>
             <PrivateRoute exact path="/post/:id" component={Post} />
+
+            <Route exact path="/not-found" component={NotFound} />
+            <Route component={NotFound} />
           </Switch>
-          <Route exact path="/not-found" component={NotFound} />
         </div>
 
         <Footer />
