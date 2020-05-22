@@ -1,5 +1,6 @@
-import { GET_POST, GET_POST_AND_COMPARE_COMMENTS, GET_POSTS, GET_POSTS_COMPARE_FIRST_COMMENT, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING, GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
+import { GET_POST, GET_POST_AND_COMPARE_COMMENTS, GET_POSTS, GET_MORE_POSTS, GET_LATEST_POSTS, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING, GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
 import { handleErrors, getHeaders } from '../utils/utils';
+
 
 export const addPost = (postData, clearForm) => dispatch => {
   dispatch(clearErrors());
@@ -58,9 +59,9 @@ export const getPosts = () => dispatch => {
     .then(handleErrors)
     .then(res => res.json())
     .then(posts => dispatch({
-      type: GET_POSTS,
-      payload: posts
-    }))
+        type: GET_POSTS,
+        payload: posts
+      }))
     .catch(() => dispatch({
       type: GET_POSTS,
       payload: []
@@ -68,20 +69,37 @@ export const getPosts = () => dispatch => {
 };
 
 
-export const getPostsAndCompareFirstComment = () => dispatch => {
-  fetch('/api/posts', {
+export const getLatestPosts = first => dispatch => {
+  fetch(`/api/latest-posts/${first}`, {
     headers: getHeaders()
   })
     .then(handleErrors)
     .then(res => res.json())
-    .then(posts => dispatch({
-      type: GET_POSTS_COMPARE_FIRST_COMMENT,
-      payload: posts
-    }))
-    .catch(() => dispatch({
-      type: GET_POSTS,
-      payload: []
-    }));
+    .then(posts => {
+      if (posts.noPosts) return;
+      dispatch({
+        type: GET_LATEST_POSTS,
+        payload: posts
+      })}
+    )
+    .catch(console.log);
+};
+
+
+export const getMorePosts = last => dispatch => {
+  fetch(`/api/more-posts/${last}`, {
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(posts => {
+      if (posts.noPosts) return;
+      dispatch({
+        type: GET_MORE_POSTS,
+        payload: posts
+      })}
+    )
+    .catch(console.log);
 };
 
 
@@ -114,10 +132,7 @@ export const getPostAndCompareComments = id => dispatch => {
       type: GET_POST_AND_COMPARE_COMMENTS,
       payload: post
     }))
-    .catch(() => dispatch({
-      type: GET_POST,
-      payload: {}
-    }));
+    .catch(console.log);
 };
 
 

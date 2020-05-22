@@ -1,6 +1,7 @@
 import Post from '../../models/Post';
 import postValidation from '../../validation/post';
 import commentValidation from '../../validation/comment';
+import { isEmpty } from '../../validation/utils';
 
 
 export const validatePostInput = (req, res, next) => {
@@ -44,10 +45,55 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find().sort({ createdAt: -1 });
+    // const posts = await Post.find().sort({ createdAt: -1 });
+    const posts = await Post.aggregate([ { $sort: { createdAt: -1 } }, { $limit: 3 } ]);
 
     if (!posts) {
       return res.status(404).json({ noPost: true, message: 'Posts could not be found.' });
+    }
+
+    res.send(posts);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const getLatestPosts = async (req, res) => {
+  try {
+    const { latest } = req.params;
+    const agg = [
+      { $match: { createdAt: { $gt: new Date(latest) } } },
+      { $sort: { createdAt: -1 } }
+    ];
+
+    const posts = await Post.aggregate(agg);
+    if (isEmpty(posts)) {
+      return res.json({ noPosts: true, message: 'No more posts.' });
+    }
+
+    res.send(posts);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const getMorePosts = async (req, res) => {
+  try {
+    const { last } = req.params;
+    const agg = [
+      { $match: { createdAt: { $lt: new Date(last) } } },
+      { $sort: { createdAt: -1 } },
+      { $limit: 3 }
+    ];
+
+    const posts = await Post.aggregate(agg);
+
+    if (isEmpty(posts)) {
+      return res.json({ noPosts: true, message: 'No more posts.' });
     }
 
     res.send(posts);

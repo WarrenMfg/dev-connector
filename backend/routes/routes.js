@@ -32,6 +32,8 @@ import {
   deleteComment,
   deletePost,
   getPost,
+  getLatestPosts,
+  getMorePosts,
   getPosts
 } from './api/posts'
 
@@ -130,6 +132,14 @@ const apiRouter = Router();
   // many (PUBLIC)
   apiRouter.route('/posts')
     .get(getPosts);
+
+  // many (PUBLIC)
+  apiRouter.route('/latest-posts/:latest')
+    .get(getLatestPosts);
+
+  // many (PUBLIC)
+  apiRouter.route('/more-posts/:last')
+    .get(getMorePosts);
 
 
 
