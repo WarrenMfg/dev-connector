@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PostItem from './PostItem'
 
-// change to functional component?
+
 class PostFeed extends Component {
   render() {
     const { posts } = this.props;

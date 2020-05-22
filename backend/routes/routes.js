@@ -105,40 +105,34 @@ const apiRouter = Router();
     .all(loginRequired)
     .post(validatePostInput, createPost);
 
-  // one (PRIVATE)
   apiRouter.route('/post/like/:_id')
     .all(loginRequired)
     .post(likeOrUnlikePost);
 
-  // one (PRIVATE)
+  apiRouter.route('/post/:_id')
+    .all(loginRequired)
+    .get(getPost)
+    .delete(deletePost);
+
   apiRouter.route('/post/comment/:_id')
     .all(loginRequired)
     .post(validateCommentInput, addComment);
 
-  // one (PRIVATE)
   apiRouter.route('/post/comment/:post_id/:comment_id')
     .all(loginRequired)
     .delete(deleteComment);
 
-  // one (PRIVATE)
-  apiRouter.route('/post/:_id')
-    .all(loginRequired)
-    .delete(deletePost);
-
-  // one (PUBLIC)
-  apiRouter.route('/post/:_id')
-    .get(getPost);
-
-  // many (PUBLIC)
+  // many (PRIVATE)
   apiRouter.route('/posts')
+    .all(loginRequired)
     .get(getPosts);
 
-  // many (PUBLIC)
   apiRouter.route('/latest-posts/:latest')
+    .all(loginRequired)
     .get(getLatestPosts);
 
-  // many (PUBLIC)
   apiRouter.route('/more-posts/:last')
+    .all(loginRequired)
     .get(getMorePosts);
 
 

@@ -1,4 +1,16 @@
-import { GET_POST, GET_POST_AND_COMPARE_COMMENTS, GET_POSTS, GET_MORE_POSTS, GET_LATEST_POSTS, ADD_POST, UPDATE_LIKES, UPDATE_COMMENTS, DELETE_POST, POST_LOADING, GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
+import {
+  GET_POST,
+  // GET_POST_FOR_LATEST_COMMENTS,
+  GET_POSTS,
+  GET_MORE_POSTS,
+  GET_LATEST_POSTS,
+  ADD_POST,
+  UPDATE_LIKES,
+  UPDATE_COMMENTS,
+  DELETE_POST,
+  POST_LOADING,
+  GET_ERRORS, CLEAR_ERRORS
+} from '../actions/types';
 import { handleErrors, getHeaders } from '../utils/utils';
 
 
@@ -122,14 +134,16 @@ export const getPost = id => dispatch => {
 };
 
 
-export const getPostAndCompareComments = id => dispatch => {
+export const getPostForLatestComments = id => dispatch => {
+  // not dispatching setPostLoading here
+
   fetch(`/api/post/${id}`, {
     headers: getHeaders()
   })
     .then(handleErrors)
     .then(res => res.json())
     .then(post => dispatch({
-      type: GET_POST_AND_COMPARE_COMMENTS,
+      type: GET_POST,
       payload: post
     }))
     .catch(console.log);

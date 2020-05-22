@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from '../common/Spinner';
-import { getPost, getPostAndCompareComments } from '../../actions/postActions';
+import { getPost, getPostForLatestComments } from '../../actions/postActions';
 import PostItem from '../posts/PostItem';
 import { isEmpty } from '../../utils/utils';
 import PostCommentForm from './PostCommentForm';
@@ -20,9 +20,15 @@ class Post extends Component {
   componentDidMount() {
     this.props.getPost(this.props.match.params.id);
     this.setState({ intervalID: setInterval(() => {
-      this.props.getPostAndCompareComments(this.props.match.params.id);
+      this.props.getPostForLatestComments(this.props.match.params.id);
     }, 3000) });
   }
+
+  // componentDidUpdate(prevProps) {
+  //   if (this.props.post.post !== prevProps.post.post) {
+  //     console.log(prevProps.post.post, this.props.post.post);
+  //   }
+  // }
 
   componentWillUnmount() {
     clearInterval(this.state.intervalID);
@@ -62,7 +68,7 @@ class Post extends Component {
 Post.propTypes = {
   post: PropTypes.object.isRequired,
   getPost: PropTypes.func.isRequired,
-  getPostAndCompareComments: PropTypes.func.isRequired
+  getPostForLatestComments: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -71,7 +77,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   getPost,
-  getPostAndCompareComments
+  getPostForLatestComments
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
