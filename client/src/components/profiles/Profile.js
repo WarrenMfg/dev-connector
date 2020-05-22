@@ -8,6 +8,7 @@ import ProfileAbout from './ProfileAbout';
 import ProfileExpEdu from './ProfileExpEdu';
 import ProfileGitHub from './ProfileGitHub';
 import { getProfileBySlug} from '../../actions/profileActions';
+import { isEmpty } from '../../utils/utils';
 
 
 export class Profile extends Component {
@@ -28,7 +29,7 @@ export class Profile extends Component {
     const { profile, loading } = this.props.profile;
     let profileContent;
 
-    if (profile === null || loading || profile?.noProfile) {
+    if (profile === null || isEmpty(profile) || loading || profile?.noProfile) {
       profileContent = <Spinner />;
     } else {
       profileContent = (

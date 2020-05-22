@@ -8,7 +8,7 @@ import { getPosts } from '../../actions/postActions';
 import { isEmpty } from '../../utils/utils'
 
 
-class Posts extends Component {
+class Connect extends Component {
   componentDidMount() {
     this.props.getPosts();
   }
@@ -17,14 +17,16 @@ class Posts extends Component {
     const { posts, loading } = this.props.post;
     let postContent;
 
-    if (isEmpty(posts) || loading) {
+    if (loading) {
       postContent = <Spinner />;
+    } else if (isEmpty(posts)) {
+      postContent = <h1 className="display-4 text-center">Be the first! 😃</h1>
     } else {
       postContent = <PostFeed posts={posts} />
     }
 
     return (
-      <div className="feed">
+      <div className="connect">
         <div className="container">
           <div className="row">
             <div className="col-md-12">
@@ -38,7 +40,7 @@ class Posts extends Component {
   }
 }
 
-Posts.propTypes = {
+Connect.propTypes = {
   post: PropTypes.object.isRequired,
   getPosts: PropTypes.func.isRequired
 };
@@ -51,4 +53,4 @@ const mapDispatchToProps = {
   getPosts
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Posts);
+export default connect(mapStateToProps, mapDispatchToProps)(Connect);

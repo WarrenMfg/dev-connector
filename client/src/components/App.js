@@ -18,7 +18,7 @@ import AddEducation from './dashboard/AddEducation';
 import Profiles from './profiles/Profiles';
 import Profile from './profiles/Profile';
 import NotFound from '../components/404/NotFound';
-import Posts from './posts/Posts';
+import Connect from './posts/Connect';
 import Post from './posts/Post';
 
 
@@ -72,7 +72,7 @@ class App extends Component {
             <PrivateRoute exact path="/add-education" component={AddEducation} />
           </Switch>
           <Switch>
-            <PrivateRoute exact path="/connect" component={Posts} />
+            <PrivateRoute exact path="/connect" component={Connect} />
           </Switch>
           <Switch>
             <PrivateRoute exact path="/post/:id" component={Post} />
