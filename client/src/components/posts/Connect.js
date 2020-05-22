@@ -32,18 +32,29 @@ class Connect extends Component {
   componentDidUpdate(prevProps) {
     const { posts } = this.props.post;
     if (prevProps.post.posts !== posts && !isEmpty(posts)) {
-      // add onscroll function to window after posts are fetched to get position of footer
+      // infinite scrolling
       this.setState({
         timeoutID: setTimeout(() => {
           const footer = document.getElementsByTagName('footer')[0].getBoundingClientRect();
-          window.onscroll = () => {
-            // if in scroll fetching range
+
+          const checkScrollPositionToGetMorePosts = () => {
             if ((window.innerHeight + window.scrollY) >= (footer.bottom - footer.height)) {
               // get more posts
               this.props.getMorePosts(posts[posts.length - 1].createdAt);
+              // but only invoke once
               window.onscroll = null;
             }
           };
+
+          // check immediately in case not scrolling, but in range
+          if ((window.innerHeight + window.scrollY) >= (footer.bottom - footer.height)) {
+            this.props.getMorePosts(posts[posts.length - 1].createdAt);
+
+          } else {
+            // onscroll function
+            window.onscroll = checkScrollPositionToGetMorePosts;
+          }
+
         }, 1000)
       });
     }
