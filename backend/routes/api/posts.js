@@ -4,6 +4,9 @@ import commentValidation from '../../validation/comment';
 import { isEmpty } from '../../validation/utils';
 
 
+const global$limit = 10;
+
+
 export const validatePostInput = (req, res, next) => {
   const { errors, isValid, valid } = postValidation(req.body);
 
@@ -46,10 +49,10 @@ export const createPost = async (req, res) => {
 export const getPosts = async (req, res) => {
   try {
     // const posts = await Post.find().sort({ createdAt: -1 });
-    const posts = await Post.aggregate([ { $sort: { createdAt: -1 } }, { $limit: 3 } ]);
+    const posts = await Post.aggregate([ { $sort: { createdAt: -1 } }, { $limit: global$limit } ]);
 
     if (!posts) {
-      return res.status(404).json({ noPost: true, message: 'Posts could not be found.' });
+      return res.json({ noPosts: true, message: 'Posts could not be found.' });
     }
 
     res.send(posts);
@@ -87,7 +90,7 @@ export const getMorePosts = async (req, res) => {
     const agg = [
       { $match: { createdAt: { $lt: new Date(last) } } },
       { $sort: { createdAt: -1 } },
-      { $limit: 3 }
+      { $limit: global$limit }
     ];
 
     const posts = await Post.aggregate(agg);

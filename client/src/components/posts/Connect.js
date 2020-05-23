@@ -34,6 +34,7 @@ class Connect extends Component {
 
     });
 
+    // throttled infinite scrolling
     window.onscroll = ( () => {
       let toggle = {canFetch: true};
       return () => {
@@ -43,7 +44,6 @@ class Connect extends Component {
           // setState with throttledInfiniteScrollingTimeoutID
           this.setState({ throttledInfiniteScrollingTimeoutID: setTimeout(() => {
             const footer = document.getElementsByTagName('footer')[0].getBoundingClientRect();
-
             if ((footer.bottom - (window.innerHeight / 2)) <= window.innerHeight) {
               const { posts } = this.props.post;
               // get more posts
@@ -51,7 +51,6 @@ class Connect extends Component {
             } else {
               toggle.canFetch = true;
             }
-
           }, 500) });
         }
       };

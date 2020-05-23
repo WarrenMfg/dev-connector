@@ -21,20 +21,24 @@ app.use(express.urlencoded({ extended: false }));
 
 // verify JWT
 app.use((req, res, next) => {
-  if (req?.headers?.authorization?.split(' ')[0] === 'Bearer') {
-    jwt.verify(req.headers.authorization.split(' ')[1], secret, (err, decode) => {
-      if (err) {
-        req.user = undefined;
-      } else {
-        // for loginRequired middleware
-        req.user = decode;
-      }
-      next();
-    });
+  try {
+    if (req.headers?.authorization?.split(' ')[0] === 'Bearer') {
+      jwt.verify(req.headers.authorization.split(' ')[1], secret, (err, decode) => {
+        if (err) {
+          req.user = undefined;
+        } else {
+          // for loginRequired middleware
+          req.user = decode;
+        }
+        next();
+      });
 
-  } else {
-    req.user = undefined;
-    next();
+    } else {
+      req.user = undefined;
+      next();
+    }
+  } catch (e) {
+    res.sendStatus(400);
   }
 });
 

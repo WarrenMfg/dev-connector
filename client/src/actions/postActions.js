@@ -69,10 +69,13 @@ export const getPosts = () => dispatch => {
   })
     .then(handleErrors)
     .then(res => res.json())
-    .then(posts => dispatch({
+    .then(posts => {
+      if (posts.noPosts) return;
+      dispatch({
         type: GET_POSTS,
         payload: posts
-      }))
+      });
+    })
     .catch(() => dispatch({
       type: GET_POSTS,
       payload: []
