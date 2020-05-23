@@ -97,7 +97,7 @@ export const getLatestPosts = first => dispatch => {
 };
 
 
-export const getMorePosts = last => dispatch => {
+export const getMorePosts = (last, toggle) => dispatch => {
   fetch(`/api/more-posts/${last}`, {
     headers: getHeaders()
   })
@@ -108,8 +108,9 @@ export const getMorePosts = last => dispatch => {
       dispatch({
         type: GET_MORE_POSTS,
         payload: posts
-      })}
-    )
+      });
+      toggle.canFetch = true;
+    })
     .catch(console.log);
 };
 

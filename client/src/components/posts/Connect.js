@@ -12,57 +12,56 @@ class Connect extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      intervalID: null,
-      timeoutID: null
+      getLatestPostsIntervalID: null,
+      throttledInfiniteScrollingTimeoutID: null
     };
   }
 
   componentDidMount() {
+
     // get initial posts
     this.props.getPosts();
 
+
     // add setInterval to continuously update new posts
-    this.setState({ intervalID: setInterval(() => {
-      const { posts } = this.props.post;
-      // pass in createdAt date of latest post
-      posts[0] && this.props.getLatestPosts(posts[0].createdAt);
-    }, 3000) });
-  }
+    this.setState({
 
-  componentDidUpdate(prevProps) {
-    const { posts } = this.props.post;
-    if (prevProps.post.posts !== posts && !isEmpty(posts)) {
-      // infinite scrolling
-      this.setState({
-        timeoutID: setTimeout(() => {
-          const footer = document.getElementsByTagName('footer')[0].getBoundingClientRect();
+      getLatestPostsIntervalID: setInterval(() => {
+        const { posts } = this.props.post;
+        // pass in createdAt date of latest post
+        posts[0] && this.props.getLatestPosts(posts[0].createdAt);
+      }, 3000)
 
-          const checkScrollPositionToGetMorePosts = () => {
-            if ((window.innerHeight + window.scrollY) >= (footer.bottom - footer.height)) {
+    });
+
+    window.onscroll = ( () => {
+      let toggle = {canFetch: true};
+      return () => {
+        if (toggle.canFetch) {
+          toggle.canFetch = false;
+
+          // setState with throttledInfiniteScrollingTimeoutID
+          this.setState({ throttledInfiniteScrollingTimeoutID: setTimeout(() => {
+            const footer = document.getElementsByTagName('footer')[0].getBoundingClientRect();
+
+            if ((footer.bottom - (window.innerHeight / 2)) <= window.innerHeight) {
+              const { posts } = this.props.post;
               // get more posts
-              this.props.getMorePosts(posts[posts.length - 1].createdAt);
-              // but only invoke once
-              window.onscroll = null;
+              this.props.getMorePosts(posts[posts.length - 1].createdAt, toggle);
+            } else {
+              toggle.canFetch = true;
             }
-          };
 
-          // check immediately in case not scrolling, but in range
-          if ((window.innerHeight + window.scrollY) >= (footer.bottom - footer.height)) {
-            this.props.getMorePosts(posts[posts.length - 1].createdAt);
+          }, 500) });
+        }
+      };
+    })();
 
-          } else {
-            // onscroll function
-            window.onscroll = checkScrollPositionToGetMorePosts;
-          }
-
-        }, 1000)
-      });
-    }
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.intervalID);
-    clearTimeout(this.state.timeoutID);
+    clearInterval(this.state.getLatestPostsIntervalID);
+    clearTimeout(this.state.throttledInfiniteScrollingTimeoutID);
     window.onscroll = null;
   }
 
