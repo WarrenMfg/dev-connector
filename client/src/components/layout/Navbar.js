@@ -36,7 +36,7 @@ class Navbar extends Component {
               src={user.avatar}
               alt={user.userName}
               title="You must have a Gravatar connected to display an image"
-              style={{ width: '20px', marginRight: '5px' }}
+              style={{ width: '20px', height: '20px', marginRight: '5px' }}
             />
             {' '}Logout
           </a>

@@ -41,8 +41,6 @@ export const createPost = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-
-
 };
 
 
@@ -206,7 +204,7 @@ export const addComment = async (req, res) => {
       user: req.user._id,
       text: req.body.text,
       userName: req.body.userName,
-      avatar: req.body. avatar
+      avatar: req.body.avatar
     };
 
     post.comments.unshift(newComment);

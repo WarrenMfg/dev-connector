@@ -2,5 +2,10 @@ node_modules
 bundle.js
 dist
 config
-/package-lock.json
-/TODO.txt
+package-lock.json
+TODO.txt
+seed.js
+seedRoutes.js
+dirtyGithubUserNames.json
+githubUserNames.json
+randomize.js

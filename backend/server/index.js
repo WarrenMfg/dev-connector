@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import { secret } from '../config/config';
 import apiRouter from '../routes/routes';
+import seedRouter from '../routes/seedRoutes';
 import { connect } from '../database/index';
 import { createGzip } from 'zlib';
 import { createReadStream } from 'fs';
@@ -44,6 +45,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/api', apiRouter);
+app.use('/seed', seedRouter);
 
 // serve all static files
 app.use(express.static(resolve(__dirname, '../../client/public')));
