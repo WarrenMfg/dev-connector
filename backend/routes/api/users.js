@@ -38,7 +38,7 @@ export const register = async (req, res) => {
     const avatar = gravatar.url(req.body.email, {
       s: '200', // size
       r: 'pg', // rating
-      d: 'mm' // default
+      d: 'identicon' // default
     }, true);
 
     // create new user
