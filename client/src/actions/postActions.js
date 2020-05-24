@@ -8,9 +8,10 @@ import {
   UPDATE_COMMENTS,
   DELETE_POST,
   POST_LOADING,
-  GET_ERRORS, CLEAR_ERRORS
+  GET_ERRORS,
+  CLEAR_ERRORS
 } from '../actions/types';
-import { handleErrors, getHeaders } from '../utils/utils';
+import { handleErrors, getHeaders, sanitize } from '../utils/utils';
 
 
 export const addPost = (postData, clearForm) => dispatch => {
@@ -26,7 +27,7 @@ export const addPost = (postData, clearForm) => dispatch => {
     .then(post => {
       dispatch({
         type: ADD_POST,
-        payload: post
+        payload: sanitize(post)
       });
       clearForm();
   })
@@ -50,7 +51,7 @@ export const addComment = (postID, newComment, clearForm) => dispatch => {
     .then(updatedPost => {
       dispatch({
         type: UPDATE_COMMENTS,
-        payload: updatedPost
+        payload: sanitize(updatedPost)
       });
       clearForm();
   })
@@ -73,7 +74,7 @@ export const getPosts = () => dispatch => {
       if (posts.noPosts) return;
       dispatch({
         type: GET_POSTS,
-        payload: posts
+        payload: posts.map(post => sanitize(post))
       });
     })
     .catch(() => dispatch({
@@ -93,7 +94,7 @@ export const getLatestPosts = first => dispatch => {
       if (posts.noPosts) return;
       dispatch({
         type: GET_LATEST_POSTS,
-        payload: posts
+        payload: posts.map(post => sanitize(post))
       })}
     )
     .catch(console.log);
@@ -114,7 +115,7 @@ export const getMorePosts = (last, toggle) => dispatch => {
 
       dispatch({
         type: GET_MORE_POSTS,
-        payload: posts
+        payload: posts.map(post => sanitize(post))
       });
 
       toggle.canFetch = true;
@@ -133,7 +134,7 @@ export const getPost = id => dispatch => {
     .then(res => res.json())
     .then(post => dispatch({
       type: GET_POST,
-      payload: post
+      payload: sanitize(post)
     }))
     .catch(() => dispatch({
       type: GET_POST,
@@ -152,7 +153,7 @@ export const getPostForLatestComments = id => dispatch => {
     .then(res => res.json())
     .then(post => dispatch({
       type: GET_POST,
-      payload: post
+      payload: sanitize(post)
     }))
     .catch(console.log);
 };
@@ -188,7 +189,7 @@ export const deleteComment = (postID, commentID) => dispatch => {
     .then(updatedPost => {
       dispatch({
         type: UPDATE_COMMENTS,
-        payload: updatedPost
+        payload: sanitize(updatedPost)
       });
     })
     .catch(err => dispatch({
@@ -208,7 +209,7 @@ export const likeOrUnlikePost = id => dispatch => {
     .then(updatedPost => {
       dispatch({
         type: UPDATE_LIKES,
-        payload: updatedPost
+        payload: sanitize(updatedPost)
       });
     })
     .catch(err => dispatch({

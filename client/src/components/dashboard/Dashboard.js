@@ -8,6 +8,7 @@ import { isEmpty } from '../../utils/utils';
 import ProfileButtons from './ProfileButtons';
 import Experience from './Experience';
 import Education from './Education';
+import { sanitize } from '../../utils/utils';
 
 
 class Dashboard extends Component {

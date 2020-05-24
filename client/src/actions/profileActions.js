@@ -1,4 +1,4 @@
-import { handleErrors, getHeaders, setCurrentUser } from '../utils/utils';
+import { handleErrors, getHeaders, setCurrentUser, sanitize } from '../utils/utils';
 import {
   GET_PROFILE,
   GET_PROFILES,
@@ -6,7 +6,8 @@ import {
   GET_MORE_PROFILES,
   PROFILE_LOADING,
   GET_ERRORS,
-  CLEAR_CURRENT_PROFILE } from './types';
+  CLEAR_PROFILE_AND_PROFILES
+} from './types';
 
 
 export const getProfiles = () => dispatch => {
@@ -21,7 +22,7 @@ export const getProfiles = () => dispatch => {
       if (profiles.noProfiles) return;
       dispatch({
         type: GET_PROFILES,
-        payload: profiles
+        payload: profiles.map(profile => sanitize(profile))
       });
     })
     .catch(() => dispatch({
@@ -42,7 +43,7 @@ export const getLatestProfiles = latest => dispatch => {
       if (profiles.noProfiles) return;
       dispatch({
       type: GET_LATEST_PROFILES,
-      payload: profiles
+      payload: profiles.map(profile => sanitize(profile))
     });
   })
     .catch(console.log);
@@ -63,7 +64,7 @@ export const getMoreProfiles = (last, toggle) => dispatch => {
 
       dispatch({
         type: GET_MORE_PROFILES,
-        payload: profiles
+        payload: profiles.map(profile => sanitize(profile))
       });
 
       toggle.canFetch = true;
@@ -84,8 +85,8 @@ export const getCurrentProfile = () => dispatch => {
       if (profile.noProfile) throw {};
       dispatch({
         type: GET_PROFILE,
-        payload: profile
-      })
+        payload: sanitize(profile)
+      });
     })
     .catch(none => dispatch({
       type: GET_PROFILE,
@@ -103,9 +104,9 @@ export const getProfileBySlug = slug => dispatch => {
   })
     .then(handleErrors)
     .then(res => res.json())
-    .then(data => dispatch({
+    .then(profile => dispatch({
       type: GET_PROFILE,
-      payload: data
+      payload: sanitize(profile)
     }))
     .catch(err => dispatch({
       type: GET_PROFILE,
@@ -171,7 +172,7 @@ export const deleteExperience = id => dispatch => {
     .then(res => res.json())
     .then(updatedProfile => dispatch({
       type: GET_PROFILE,
-      payload: updatedProfile
+      payload: sanitize(updatedProfile)
     }))
     .catch(err => dispatch({
       type: GET_ERRORS,
@@ -190,7 +191,7 @@ export const deleteEducation = id => dispatch => {
     .then(res => res.json())
     .then(updatedProfile => dispatch({
       type: GET_PROFILE,
-      payload: updatedProfile
+      payload: sanitize(updatedProfile)
     }))
     .catch(err => dispatch({
       type: GET_ERRORS,
@@ -209,7 +210,7 @@ export const deleteAccount = history => dispatch => {
       .then(handleErrors)
       .then(() => {
         // set current user to no user
-        dispatch(clearCurrentProfile())
+        dispatch(clearProfileAndProfiles());
         // clear current profile
         dispatch(setCurrentUser({}));
         // remove local storage
@@ -233,6 +234,6 @@ const setProfileLoading = () => ({
   type: PROFILE_LOADING
 });
 
-export const clearCurrentProfile = () => ({
-  type: CLEAR_CURRENT_PROFILE
+export const clearProfileAndProfiles = () => ({
+  type: CLEAR_PROFILE_AND_PROFILES
 });

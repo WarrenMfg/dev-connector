@@ -1,4 +1,4 @@
-import validator from 'validator';
+import { escape } from 'validator';
 import { isEmpty } from './utils';
 
 
@@ -11,33 +11,46 @@ export default data => {
   data.degree = data.degree?.trim() || '';
   data.fieldOfStudy = data.fieldOfStudy?.trim() || '';
   data.from = data.from?.trim() || '';
+  data.to = data.to?.trim() || '';
+  data.description = data.description?.trim() || '';
 
-  // validate school
-  if (validator.isEmpty(data.school)) {
+
+  // school
+  if (isEmpty(data.school)) {
     errors.school = 'School field is required';
   } else {
-    valid.school = data.school;
+    valid.school = escape(data.school);
   }
 
-  // validate degree
-  if (validator.isEmpty(data.degree)) {
+  // degree
+  if (isEmpty(data.degree)) {
     errors.degree = 'Degree field is required';
   } else {
-    valid.degree = data.degree;
+    valid.degree = escape(data.degree);
   }
 
-  // validate fieldOfStudy
-  if (validator.isEmpty(data.fieldOfStudy)) {
+  // fieldOfStudy
+  if (isEmpty(data.fieldOfStudy)) {
     errors.fieldOfStudy = 'Field of Study field is required';
   } else {
-    valid.fieldOfStudy = data.fieldOfStudy;
+    valid.fieldOfStudy = escape(data.fieldOfStudy);
   }
 
-  // validate from
-  if (validator.isEmpty(data.from)) {
+  // from
+  if (isEmpty(data.from)) {
     errors.from = 'From Date field is required';
   } else {
-    valid.from = data.from;
+    valid.from = escape(data.from);
+  }
+
+  // to
+  if (!isEmpty(data.to)) {
+    valid.to = escape(data.to);
+  }
+
+  // description
+  if (!isEmpty(data.description)) {
+    valid.description = escape(data.description);
   }
 
   return {

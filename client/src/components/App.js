@@ -4,7 +4,7 @@ import PrivateRoute from './common/PrivateRoute';
 import jwtDecode from 'jwt-decode';
 import store from '../store';
 import { setCurrentUser } from '../utils/utils';
-import { clearCurrentProfile } from '../actions/profileActions';
+import { clearProfileAndProfiles } from '../actions/profileActions';
 import Navbar from './layout/Navbar';
 import Footer from './layout/Footer';
 import Landing from './layout/Landing';
@@ -36,7 +36,7 @@ if (localStorage.token) {
     // Logout user
     store.dispatch(logoutUser());
     //
-    store.dispatch(clearCurrentProfile());
+    store.dispatch(clearProfileAndProfiles());
 
     // Redirect to login
     window.location.href = '/login';

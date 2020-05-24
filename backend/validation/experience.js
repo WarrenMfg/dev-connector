@@ -1,4 +1,4 @@
-import validator from 'validator';
+import { escape } from 'validator';
 import { isEmpty } from './utils';
 
 
@@ -9,27 +9,46 @@ export default data => {
   // ensure properties are present
   data.title = data.title?.trim() || '';
   data.company = data.company?.trim() || '';
+  data.location = data.location?.trim() || '';
   data.from = data.from?.trim() || '';
+  data.to = data.to?.trim() || '';
+  data.description = data.description?.trim() || '';
 
-  // validate title
-  if (validator.isEmpty(data.title)) {
+
+  // title (required)
+  if (isEmpty(data.title)) {
     errors.title = 'Title field is required';
   } else {
-    valid.title = data.title;
+    valid.title = escape(data.title);
   }
 
-  // validate company
-  if (validator.isEmpty(data.company)) {
+  // company (required)
+  if (isEmpty(data.company)) {
     errors.company = 'Company field is required';
   } else {
-    valid.company = data.company;
+    valid.company = escape(data.company);
   }
 
-  // validate from
-  if (validator.isEmpty(data.from)) {
+  // location
+  if (!isEmpty(data.location)) {
+    valid.location = escape(data.location);
+  }
+
+  // from
+  if (isEmpty(data.from)) {
     errors.from = 'From Date field is required';
   } else {
-    valid.from = data.from;
+    valid.from = escape(data.from);
+  }
+
+  // to
+  if (!isEmpty(data.to)) {
+    valid.to = escape(data.to);
+  }
+
+  // description
+  if (!isEmpty(data.description)) {
+    valid.description = escape(data.description);
   }
 
   return {

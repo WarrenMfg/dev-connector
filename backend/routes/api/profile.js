@@ -50,12 +50,12 @@ export const createOrUpdateUserProfile = async (req, res) => {
     tempProfileObj.slug = req.user.userName;
 
     // populate tempProfileObj object with form input
+    if (req.body.status) tempProfileObj.status = req.body.status;
     if (req.body.company) tempProfileObj.company = req.body.company;
     if (req.body.website) tempProfileObj.website = req.body.website;
     if (req.body.location) tempProfileObj.location = req.body.location;
-    if (req.body.status) tempProfileObj.status = req.body.status;
-    if (req.body.bio) tempProfileObj.bio = req.body.bio;
     if (req.body.githubUserName) tempProfileObj.githubUserName = req.body.githubUserName;
+    if (req.body.bio) tempProfileObj.bio = req.body.bio;
 
     // skills
     if (req.body.skills) {

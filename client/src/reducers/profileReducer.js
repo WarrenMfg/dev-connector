@@ -4,7 +4,7 @@ import {
   GET_LATEST_PROFILES,
   GET_MORE_PROFILES,
   PROFILE_LOADING,
-  CLEAR_CURRENT_PROFILE
+  CLEAR_PROFILE_AND_PROFILES
 } from '../actions/types';
 
 
@@ -50,10 +50,11 @@ export default (state = initialState, action) => {
         profiles: [...state.profiles, ...action.payload]
       };
 
-    case CLEAR_CURRENT_PROFILE:
+    case CLEAR_PROFILE_AND_PROFILES:
       return {
-        ...state,
-        profile: null
+        profile: null,
+        profiles: null,
+        loading: false
       }
 
     default:

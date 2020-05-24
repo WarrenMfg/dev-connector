@@ -9,6 +9,7 @@ import SelectListGroup from '../common/SelectListGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import InputGroup from '../common/InputGroup';
 import { createOrUpdateProfile, getCurrentProfile } from '../../actions/profileActions';
+import getOptions from './StatusOptions';
 
 
 class EditProfile extends Component {
@@ -41,11 +42,14 @@ class EditProfile extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.profile.profile === null) {
+      return;
+    }
     if (prevProps.errors !== this.props.errors) {
       this.setState({ errors: this.props.errors });
     }
     if (prevProps.profile.profile !== this.props.profile.profile) {
-      let profile = this.props.profile.profile;
+      let { profile } = this.props.profile;
       // make skills CSV from skills array
       const skills = profile.skills.join(',');
       // normalize the other properties
@@ -215,22 +219,6 @@ class EditProfile extends Component {
 
   }
 }
-
-// SelectListGroup options for status
-const getOptions = () => (
-  [
-    { label: 'Select a Professional Status', value: '' },
-    { label: 'Developer', value: 'Developer' },
-    { label: 'Junior Developer', value: 'Junior Developer' },
-    { label: 'Senior Developer', value: 'Senior Developer' },
-    { label: 'Manager', value: 'Manager' },
-    { label: 'Instructor/Teacher', value: 'Instructor/Teacher' },
-    { label: 'Student', value: 'Student' },
-    { label: 'Intern', value: 'Intern' },
-    { label: 'Actively Seeking Employment', value: 'Actively Seeking Employment' },
-    { label: 'Other', value: 'Other' }
-  ]
-);
 
 const getSocialInputs = (state, onChange) => {
   const { twitter, facebook, linkedin, youtube, instagram, errors } = state;

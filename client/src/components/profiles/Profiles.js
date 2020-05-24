@@ -54,6 +54,12 @@ class Profiles extends Component {
     })();
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.getLatestProfilesIntervalID);
+    clearTimeout(this.state.throttledInfiniteScrollingTimeoutID);
+    window.onscroll = null;
+  }
+
   render() {
     const { profiles, loading } = this.props.profile;
     let profileItems;

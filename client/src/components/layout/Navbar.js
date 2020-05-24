@@ -3,14 +3,14 @@ import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/authActions';
-import { clearCurrentProfile } from '../../actions/profileActions';
+import { clearProfileAndProfiles } from '../../actions/profileActions';
 
 
 class Navbar extends Component {
   handleLogout(e) {
     e.preventDefault();
 
-    this.props.clearCurrentProfile();
+    this.props.clearProfileAndProfiles();
     this.props.logoutUser(this.props.history);
   }
 
@@ -82,7 +82,7 @@ class Navbar extends Component {
 
 Navbar.propTypes = {
   logoutUser: PropTypes.func.isRequired,
-  clearCurrentProfile: PropTypes.func.isRequired,
+  clearProfileAndProfiles: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
 
@@ -95,7 +95,7 @@ const mapStateToProps = state => ({
 // dispatch => bindActionCreators(mapDispatchToProps, dispatch)
 const mapDispatchToProps = {
   logoutUser,
-  clearCurrentProfile
+  clearProfileAndProfiles
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));
