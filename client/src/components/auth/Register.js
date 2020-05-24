@@ -66,7 +66,7 @@ class Register extends Component {
                   value={this.state.userName}
                   error={errors.userName}
                   onChange={this.onChange}
-                  info='Your profile&apos;s unique URL slug'
+                  info='Your profile&apos;s unique URL slug (e.g. firstName-lastName)'
                 />
 
                 <TextFieldGroup

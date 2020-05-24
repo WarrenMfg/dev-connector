@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import {
-  // hasVerifiedToken,
   validate,
   register,
   login,
@@ -47,7 +46,7 @@ const apiRouter = Router();
   // AUTHORIZATION
   // register
   apiRouter.route('/register')
-    // .all(validate)
+    .all(validate)
     .post(register);
 
   // login

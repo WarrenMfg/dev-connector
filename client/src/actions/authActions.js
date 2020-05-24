@@ -1,5 +1,5 @@
 import { handleErrors, getHeaders, setCurrentUser } from '../utils/utils';
-import { GET_ERRORS } from './types';
+import { GET_ERRORS, CLEAR_ERRORS } from './types';
 import jwtDecode from 'jwt-decode';
 
 // REGISTER
@@ -10,7 +10,12 @@ export const registerUser = (newUser, history) => dispatch => {
     body: JSON.stringify(newUser)
   })
     .then(handleErrors)
-    .then(() => history.push('/login'))
+    .then(() => {
+      dispatch({
+        type: CLEAR_ERRORS
+      })
+      history.push('/login');
+    })
     .catch(err => dispatch({
         type: GET_ERRORS,
         payload: err
