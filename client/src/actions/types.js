@@ -3,6 +3,8 @@ export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
 export const GET_PROFILE = 'GET_PROFILE';
 export const GET_PROFILES = 'GET_PROFILES';
+export const GET_LATEST_PROFILES = 'GET_LATEST_PROFILES';
+export const GET_MORE_PROFILES = 'GET_MORE_PROFILES';
 
 
 

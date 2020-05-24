@@ -46,7 +46,6 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
   try {
-    // const posts = await Post.find().sort({ createdAt: -1 });
     const posts = await Post.aggregate([ { $sort: { createdAt: -1 } }, { $limit: global$limit } ]);
 
     if (!posts) {
@@ -71,7 +70,7 @@ export const getLatestPosts = async (req, res) => {
 
     const posts = await Post.aggregate(agg);
     if (isEmpty(posts)) {
-      return res.json({ noPosts: true, message: 'No more posts.' });
+      return res.json({ noPosts: true, message: 'No new posts.' });
     }
 
     res.send(posts);

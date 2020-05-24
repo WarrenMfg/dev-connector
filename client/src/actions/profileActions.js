@@ -2,6 +2,8 @@ import { handleErrors, getHeaders, setCurrentUser } from '../utils/utils';
 import {
   GET_PROFILE,
   GET_PROFILES,
+  GET_LATEST_PROFILES,
+  GET_MORE_PROFILES,
   PROFILE_LOADING,
   GET_ERRORS,
   CLEAR_CURRENT_PROFILE } from './types';
@@ -15,15 +17,58 @@ export const getProfiles = () => dispatch => {
   })
     .then(handleErrors)
     .then(res => res.json())
-    .then(data => dispatch({
-      type: GET_PROFILES,
-      payload: data
-    }))
+    .then(profiles => {
+      if (profiles.noProfiles) return;
+      dispatch({
+        type: GET_PROFILES,
+        payload: profiles
+      });
+    })
     .catch(() => dispatch({
       type: GET_PROFILES,
       payload: []
     })
   );
+};
+
+
+export const getLatestProfiles = latest => dispatch => {
+  fetch(`/api/latest-profiles/${latest}`, {
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(profiles => {
+      if (profiles.noProfiles) return;
+      dispatch({
+      type: GET_LATEST_PROFILES,
+      payload: profiles
+    });
+  })
+    .catch(console.log);
+};
+
+
+export const getMoreProfiles = (last, toggle) => dispatch => {
+  fetch(`/api/more-profiles/${last}`, {
+    headers: getHeaders()
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(profiles => {
+      if (profiles.noProfiles) {
+        toggle.canFetch = true;
+        return;
+      }
+
+      dispatch({
+        type: GET_MORE_PROFILES,
+        payload: profiles
+      });
+
+      toggle.canFetch = true;
+    })
+    .catch(console.log);
 };
 
 

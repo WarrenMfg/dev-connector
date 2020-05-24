@@ -107,11 +107,16 @@ export const getMorePosts = (last, toggle) => dispatch => {
     .then(handleErrors)
     .then(res => res.json())
     .then(posts => {
-      if (posts.noPosts) return;
+      if (posts.noPosts) {
+        toggle.canFetch = true;
+        return;
+      };
+
       dispatch({
         type: GET_MORE_POSTS,
         payload: posts
       });
+
       toggle.canFetch = true;
     })
     .catch(console.log);

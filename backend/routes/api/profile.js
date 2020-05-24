@@ -2,8 +2,12 @@ import Profile from '../../models/Profile';
 import profileValidation from '../../validation/profile';
 import experienceValidation from '../../validation/experience';
 import educationValidation from '../../validation/education';
+import { isEmpty } from '../../validation/utils';
 import axios from 'axios';
 import { githubAuthToken } from '../../config/config';
+
+
+const global$limit = 10;
 
 
 export const currentUserProfile = async (req, res) => {
@@ -149,16 +153,66 @@ export const getGitHubRepos = (req, res) => {
 };
 
 
-export const getAllProfiles = async (req, res) => {
+export const getProfiles = async (req, res) => {
   try {
-    const profiles = await Profile.find({}).lean().exec();
+    const profiles = await Profile.aggregate([ { $sort: { createdAt: -1 } }, { $limit: global$limit } ]);
 
     if (!profiles) {
-      return res.status(404).json({ noProfile: true, message: 'Profiles could not be found.' });
+      return res.json({ noProfiles: true, message: 'Profiles could not be found.' });
     }
 
     Profile
-      .populate(profiles, { path: 'user', model: 'User', select: 'avatar' })
+      .populate(profiles, { model: 'User', select: 'avatar', path: 'user' })
+      .then(populated => res.send(populated))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const getLatestProfiles = async (req, res) => {
+  try {
+    const { latest } = req.params;
+    const agg = [
+      { $match: { createdAt: { $gt: new Date(latest) } } },
+      { $sort: { createdAt: -1 } }
+    ];
+
+    const profiles = await Profile.aggregate(agg);
+    if (isEmpty(profiles)) {
+      return res.json({ noProfiles: true, message: 'No new profiles.' });
+    }
+
+    Profile
+      .populate(profiles, { model: 'User', select: 'avatar', path: 'user' })
+      .then(populated => res.send(populated))
+      .catch(err => res.status(500).json({ message: err.message }));
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const getMoreProfiles = async (req, res) => {
+  try {
+    const { last } = req.params;
+    const agg = [
+      { $match: { createdAt: { $lt: new Date(last) } } },
+      { $sort: { createdAt: -1 } },
+      { $limit: global$limit }
+    ];
+
+    const profiles = await Profile.aggregate(agg);
+
+    if (isEmpty(profiles)) {
+      return res.json({ noProfiles: true, message: 'No more profiles.' });
+    }
+
+    Profile
+      .populate(profiles, { model: 'User', select: 'avatar', path: 'user' })
       .then(populated => res.send(populated))
       .catch(err => res.status(500).json({ message: err.message }));
 

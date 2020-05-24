@@ -25,49 +25,57 @@ export default (state = initialState, action) => {
         ...state,
         posts: [action.payload, ...state.posts]
       };
+
     case UPDATE_LIKES:
       return {
         ...state,
         posts: state.posts.map(post => post._id === action.payload._id ? action.payload : post)
       };
+
     case UPDATE_COMMENTS:
       return {
         ...state,
         post: Object.assign(state.post, action.payload)
-      }
+      };
+
     case POST_LOADING:
       return {
         ...state,
         loading: true
       };
-    case GET_POSTS:
-      return {
-        ...state,
-        posts: action.payload,
-        loading: false
-      };
-    case GET_MORE_POSTS:
-      return {
-        ...state,
-        posts: [...state.posts, ...action.payload]
-      }
-    case GET_LATEST_POSTS:
-      return {
-        ...state,
-        // if there are new posts, front load them; else return same state
-        posts: action.payload.length ? [...action.payload, ...state.posts] : state.posts
-      };
+
     case GET_POST:
       return {
         ...state,
         post: isEmpty(action.payload) ? state.post : Object.assign(state.post, action.payload),
         loading: false
       };
+
+    case GET_POSTS:
+      return {
+        ...state,
+        posts: action.payload,
+        loading: false
+      };
+
+    case GET_LATEST_POSTS:
+      return {
+        ...state,
+        posts: [...action.payload, ...state.posts]
+      };
+
+    case GET_MORE_POSTS:
+      return {
+        ...state,
+        posts: [...state.posts, ...action.payload]
+      };
+
     case DELETE_POST:
       return {
         ...state,
         posts: state.posts.filter(post => post._id !== action.payload)
       };
+
     default:
       return state;
   }

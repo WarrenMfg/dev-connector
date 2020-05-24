@@ -2,14 +2,56 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../common/Spinner';
-import { getProfiles } from '../../actions/profileActions';
+import { getProfiles, getLatestProfiles, getMoreProfiles } from '../../actions/profileActions';
 import { isEmpty } from '../../utils/utils';
 import ProfileCard from './ProfileCard';
 
 
 class Profiles extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      getLatestProfilesIntervalID: null,
+      throttledInfiniteScrollingTimeoutID: null
+    };
+  }
+
   componentDidMount() {
+    // get initial profiles
     this.props.getProfiles();
+
+    // add setInterval to continuously update new profiles every minute
+    this.setState({
+
+      getLatestProfilesIntervalID: setInterval(() => {
+        const { profiles } = this.props.profile;
+        // pass in createdAt date of latest post
+        profiles[0] && this.props.getLatestProfiles(profiles[0].createdAt);
+      }, 1000 * 60)
+
+    });
+
+    // throttled infinite scrolling
+    window.onscroll = ( () => {
+      let toggle = {canFetch: true};
+      return () => {
+        if (toggle.canFetch) {
+          toggle.canFetch = false;
+
+          // setState with throttledInfiniteScrollingTimeoutID
+          this.setState({ throttledInfiniteScrollingTimeoutID: setTimeout(() => {
+            const footer = document.getElementsByTagName('footer')[0].getBoundingClientRect();
+            if ((footer.bottom - (window.innerHeight / 2)) <= window.innerHeight) {
+              const { profiles } = this.props.profile;
+              // get more profiles
+              this.props.getMoreProfiles(profiles[profiles.length - 1].createdAt, toggle);
+            } else {
+              toggle.canFetch = true;
+            }
+          }, 500) });
+        }
+      };
+    })();
   }
 
   render() {
@@ -44,6 +86,8 @@ class Profiles extends Component {
 
 Profiles.propTypes = {
   getProfiles: PropTypes.func.isRequired,
+  getLatestProfiles: PropTypes.func.isRequired,
+  getMoreProfiles: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired
 };
 
@@ -52,7 +96,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  getProfiles
+  getProfiles,
+  getLatestProfiles,
+  getMoreProfiles
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profiles)
+export default connect(mapStateToProps, mapDispatchToProps)(Profiles);

@@ -21,7 +21,9 @@ import {
   deleteEducation,
   getOneBySlug,
   getGitHubRepos,
-  getAllProfiles
+  getProfiles,
+  getLatestProfiles,
+  getMoreProfiles
 } from './api/profile';
 import {
   validatePostInput,
@@ -95,7 +97,13 @@ const apiRouter = Router();
 
   // many
   apiRouter.route('/profiles')
-    .get(getAllProfiles);
+    .get(getProfiles);
+
+  apiRouter.route('/latest-profiles/:latest')
+    .get(getLatestProfiles);
+
+  apiRouter.route('/more-profiles/:last')
+    .get(getMoreProfiles);
 
 
 
