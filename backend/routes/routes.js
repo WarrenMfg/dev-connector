@@ -56,7 +56,7 @@ const apiRouter = Router();
 
   // logout
   apiRouter.route('/logout')
-    .all(loginRequired)
+    // .all(loginRequired)
     .put(logout);
 
 

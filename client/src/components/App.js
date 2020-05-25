@@ -4,7 +4,9 @@ import PrivateRoute from './common/PrivateRoute';
 import jwtDecode from 'jwt-decode';
 import store from '../store';
 import { setCurrentUser } from '../utils/utils';
-import { clearProfileAndProfiles } from '../actions/profileActions';
+import { CLEAR_PROFILE_AND_PROFILES, CLEAR_POST_AND_POSTS } from '../actions/types'
+// import { clearProfileAndProfiles } from '../actions/profileActions';
+import { logoutUser } from '../actions/authActions';
 import Navbar from './layout/Navbar';
 import Footer from './layout/Footer';
 import Landing from './layout/Landing';
@@ -24,22 +26,24 @@ import Post from './posts/Post';
 
 // Check for token
 if (localStorage.token) {
-  // Decode token and get user info and exp
   const decoded = jwtDecode(localStorage.token);
-  // Set user and isAuthenticated
-  store.dispatch(setCurrentUser(decoded));
 
   // Check for expired token
   const currentTime = Date.now() / 1000;
+
   // time currentTime is later than exp
   if (decoded.exp < currentTime) {
-    // Logout user
-    store.dispatch(logoutUser());
-    //
-    store.dispatch(clearProfileAndProfiles());
+    localStorage.removeItem('token');
+    store.dispatch(setCurrentUser({}));
+    store.dispatch({ type: CLEAR_PROFILE_AND_PROFILES });
+    store.dispatch({ type: CLEAR_POST_AND_POSTS });
 
     // Redirect to login
     window.location.href = '/login';
+
+  } else {
+    // set user
+    store.dispatch(setCurrentUser(decoded));
   }
 }
 
