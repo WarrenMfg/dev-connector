@@ -22,14 +22,14 @@
   "main": "backend/server/index.js",
   "scripts": {
     "seed": "node dist/database/seeder.js",
-    "buildFrontend": "npx webpack --config webpack.config.js",
+    "buildFrontend": "npx webpack",
     "watchFrontend": "npx webpack --watch",
     "buildBackend": "npx babel backend --out-dir dist",
     "watchBackend": "npx babel backend --watch --out-dir dist",
     "start": "node dist/server/index.js",
     "startDev": "nodemon dist/server/index.js",
     "heroku-prebuild": "NPM_CONFIG_PRODUCTION=false",
-    "heroku-postbuild": "npm run buildFrontend && npm run buildBackend"
+    "heroku-postbuild": "webpack -p && npm run buildBackend"
   },
   "nodemonConfig": {
     "watch": [
