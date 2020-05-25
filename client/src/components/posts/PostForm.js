@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import { addPost } from '../../actions/postActions';
 
@@ -38,7 +39,7 @@ class PostForm extends Component {
       avatar
     };
 
-    this.props.addPost(newPost, () => this.setState({ text: '' }));
+    this.props.addPost(newPost, () => this.setState({ text: '' }), this.props.history);
 
   }
 
@@ -83,4 +84,4 @@ const mapDispatchToProps = {
   addPost
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostForm);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PostForm));

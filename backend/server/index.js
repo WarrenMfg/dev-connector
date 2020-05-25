@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
+import jwtDecode from 'jwt-decode';
 import { secret } from '../config/config';
 import apiRouter from '../routes/routes';
 import seedRouter from '../routes/seedRoutes';
@@ -24,8 +25,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
   try {
     if (req.headers?.authorization?.split(' ')[0] === 'Bearer') {
-      jwt.verify(req.headers.authorization.split(' ')[1], secret, (err, decode) => {
+      const token = req.headers.authorization.split(' ')[1];
+      jwt.verify(token, secret, (err, decode) => {
         if (err) {
+          req.expiredUser = jwtDecode(token);
           req.user = undefined;
         } else {
           // for loginRequired middleware

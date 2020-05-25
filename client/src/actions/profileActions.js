@@ -1,4 +1,4 @@
-import { handleErrors, getHeaders, setCurrentUser, sanitize } from '../utils/utils';
+import { handleErrors, getHeaders, setCurrentUser, sanitize, logoutExpiredUser } from '../utils/utils';
 import {
   GET_PROFILE,
   GET_PROFILES,
@@ -74,7 +74,7 @@ export const getMoreProfiles = (last, toggle) => dispatch => {
 };
 
 
-export const getCurrentProfile = () => dispatch => {
+export const getCurrentProfile = history => dispatch => {
   dispatch(setProfileLoading());
 
   fetch('/api/profile', {
@@ -89,11 +89,17 @@ export const getCurrentProfile = () => dispatch => {
         payload: sanitize(profile)
       });
     })
-    .catch(none => dispatch({
-      type: GET_PROFILE,
-      payload: none
-    })
-  );
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_PROFILE,
+          payload: {}
+        });
+      }
+    });
 };
 
 
@@ -124,11 +130,17 @@ export const createOrUpdateProfile = (profileData, history) => dispatch => {
   })
     .then(handleErrors)
     .then(() => history.push('/dashboard'))
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    })
-  );
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
+    });
 };
 
 
@@ -140,11 +152,17 @@ export const createExperience = (experienceData, history) => dispatch => {
   })
     .then(handleErrors)
     .then(() => history.push('/dashboard'))
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    })
-  );
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
+    });
 };
 
 
@@ -156,15 +174,21 @@ export const createEducation = (educationData, history) => dispatch => {
   })
     .then(handleErrors)
     .then(() => history.push('/dashboard'))
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    })
-  );
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
+    });
 };
 
 
-export const deleteExperience = id => dispatch => {
+export const deleteExperience = (id, history) => dispatch => {
   fetch(`/api/experience/${id}`, {
     method: 'DELETE',
     headers: getHeaders()
@@ -175,15 +199,21 @@ export const deleteExperience = id => dispatch => {
       type: GET_PROFILE,
       payload: sanitize(updatedProfile)
     }))
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    })
-  );
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
+    });
 };
 
 
-export const deleteEducation = id => dispatch => {
+export const deleteEducation = (id, history) => dispatch => {
   fetch(`/api/education/${id}`, {
     method: 'DELETE',
     headers: getHeaders()
@@ -194,11 +224,17 @@ export const deleteEducation = id => dispatch => {
       type: GET_PROFILE,
       payload: sanitize(updatedProfile)
     }))
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    })
-  );
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
+    });
 };
 
 
@@ -219,11 +255,17 @@ export const deleteAccount = history => dispatch => {
         // redirect
         history.push('/');
       })
-      .catch(err => dispatch({
-        type: GET_ERRORS,
-        payload: err
-      })
-    );
+      .catch(err => {
+        if (err.expiredUser) {
+          logoutExpiredUser(dispatch);
+          history.push('/');
+        } else {
+          dispatch({
+            type: GET_ERRORS,
+            payload: err
+          });
+        }
+      });
   }
 };
 

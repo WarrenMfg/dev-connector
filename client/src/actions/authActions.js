@@ -1,6 +1,7 @@
-import { handleErrors, getHeaders, setCurrentUser } from '../utils/utils';
+import { handleErrors, getHeaders, setCurrentUser, logoutExpiredUser } from '../utils/utils';
 import { GET_ERRORS, CLEAR_ERRORS, CLEAR_PROFILE_AND_PROFILES, CLEAR_POST_AND_POSTS } from './types';
 import jwtDecode from 'jwt-decode';
+
 
 // REGISTER
 export const registerUser = (newUser, history) => dispatch => {
@@ -36,12 +37,11 @@ export const loginUser = userData => dispatch => {
       // save to local storage
       localStorage.setItem('token', data.token);
       // decode token to get userName and email
-      const decoded = jwtDecode(data.token);
+
+      const decoded = jwtDecode(data.token.split(' ')[1]);
       // set current user
       dispatch(setCurrentUser(decoded));
-      dispatch({
-        type: CLEAR_ERRORS
-      })
+      dispatch({ type: CLEAR_ERRORS });
     })
     .catch(err => dispatch({
       type: GET_ERRORS,
@@ -68,10 +68,14 @@ export const logoutUser = history => dispatch => {
       history.push('/');
     })
     .catch(err => {
-      console.log(err);
-      dispatch({
-        type: GET_ERRORS,
-        payload: err
-      });
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
     });
 };

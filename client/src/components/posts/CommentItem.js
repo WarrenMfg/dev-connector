@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { deleteComment } from '../../actions/postActions';
 
 
 class CommentItem extends Component {
+  constructor(props) {
+    super(props);
+    this.onDelete = this.onDelete.bind(this);
+  }
+
   onDelete(postID, commentID) {
-    this.props.deleteComment(postID, commentID);
+    this.props.deleteComment(postID, commentID, this.props.history);
   }
 
   render() {
     const { comment, postID, auth } = this.props;
 
     const deleteButton = (
-      <button onClick={this.onDelete.bind(this, postID, comment._id)} type="button" className="btn btn-danger mr-1">
+      <button onClick={() => this.onDelete(postID, comment._id)} type="button" className="btn btn-danger mr-1">
         <i className="fas fa-times" />
       </button>
     );
@@ -57,4 +63,4 @@ const mapDispatchToProps = {
   deleteComment
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommentItem);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CommentItem));

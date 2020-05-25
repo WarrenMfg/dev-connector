@@ -11,10 +11,12 @@ import {
   GET_ERRORS,
   CLEAR_ERRORS
 } from '../actions/types';
-import { handleErrors, getHeaders, sanitize } from '../utils/utils';
+import { handleErrors, getHeaders, sanitize, logoutExpiredUser } from '../utils/utils';
 
 
-export const addPost = (postData, clearForm) => dispatch => {
+
+
+export const addPost = (postData, clearForm, history) => dispatch => {
   dispatch(clearErrors());
 
   fetch('/api/post', {
@@ -31,38 +33,21 @@ export const addPost = (postData, clearForm) => dispatch => {
       });
       clearForm();
   })
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    }));
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
+    });
 };
 
 
-export const addComment = (postID, newComment, clearForm) => dispatch => {
-  dispatch(clearErrors());
-
-  fetch(`/api/post/comment/${postID}`, {
-    method: 'POST',
-    headers: getHeaders(),
-    body: JSON.stringify(newComment)
-  })
-    .then(handleErrors)
-    .then(res => res.json())
-    .then(updatedPost => {
-      dispatch({
-        type: UPDATE_COMMENTS,
-        payload: sanitize(updatedPost)
-      });
-      clearForm();
-  })
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    }));
-};
-
-
-export const getPosts = () => dispatch => {
+export const getPosts = history => dispatch => {
   dispatch(setPostLoading());
 
   fetch('/api/posts', {
@@ -77,14 +62,21 @@ export const getPosts = () => dispatch => {
         payload: posts.map(post => sanitize(post))
       });
     })
-    .catch(() => dispatch({
-      type: GET_POSTS,
-      payload: []
-    }));
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_POSTS,
+          payload: []
+        });
+      }
+    });
 };
 
 
-export const getLatestPosts = first => dispatch => {
+export const getLatestPosts = (first, history) => dispatch => {
   fetch(`/api/latest-posts/${first}`, {
     headers: getHeaders()
   })
@@ -97,11 +89,18 @@ export const getLatestPosts = first => dispatch => {
         payload: posts.map(post => sanitize(post))
       })}
     )
-    .catch(console.log);
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        console.log(err);
+      }
+    });
 };
 
 
-export const getMorePosts = (last, toggle) => dispatch => {
+export const getMorePosts = (last, toggle, history) => dispatch => {
   fetch(`/api/more-posts/${last}`, {
     headers: getHeaders()
   })
@@ -120,11 +119,18 @@ export const getMorePosts = (last, toggle) => dispatch => {
 
       toggle.canFetch = true;
     })
-    .catch(console.log);
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        console.log(err);
+      }
+    });
 };
 
 
-export const getPost = id => dispatch => {
+export const getPost = (id, history) => dispatch => {
   dispatch(setPostLoading());
 
   fetch(`/api/post/${id}`, {
@@ -136,14 +142,21 @@ export const getPost = id => dispatch => {
       type: GET_POST,
       payload: sanitize(post)
     }))
-    .catch(() => dispatch({
-      type: GET_POST,
-      payload: {}
-    }));
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_POST,
+          payload: {}
+        });
+      }
+    });
 };
 
 
-export const getPostForLatestComments = id => dispatch => {
+export const getPostForLatestComments = (id, history) => dispatch => {
   // not dispatching setPostLoading here
 
   fetch(`/api/post/${id}`, {
@@ -155,11 +168,49 @@ export const getPostForLatestComments = id => dispatch => {
       type: GET_POST,
       payload: sanitize(post)
     }))
-    .catch(console.log);
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        console.log(err);
+      }
+    });
 };
 
 
-export const deletePost = id => dispatch => {
+export const addComment = (postID, newComment, clearForm, history) => dispatch => {
+  dispatch(clearErrors());
+
+  fetch(`/api/post/comment/${postID}`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(newComment)
+  })
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(updatedPost => {
+      dispatch({
+        type: UPDATE_COMMENTS,
+        payload: sanitize(updatedPost)
+      });
+      clearForm();
+  })
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
+    });
+};
+
+
+export const deletePost = (id, history) => dispatch => {
   fetch(`/api/post/${id}`, {
     method: 'DELETE',
     headers: getHeaders()
@@ -172,14 +223,21 @@ export const deletePost = id => dispatch => {
         payload: id
       });
     })
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    }));
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
+    });
 };
 
 
-export const deleteComment = (postID, commentID) => dispatch => {
+export const deleteComment = (postID, commentID, history) => dispatch => {
   fetch(`/api/post/comment/${postID}/${commentID}`, {
     method: 'DELETE',
     headers: getHeaders()
@@ -192,14 +250,21 @@ export const deleteComment = (postID, commentID) => dispatch => {
         payload: sanitize(updatedPost)
       });
     })
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    }));
+    .catch(err => {
+      if (err.expiredUser) {
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
+    });
 };
 
 
-export const likeOrUnlikePost = id => dispatch => {
+export const likeOrUnlikePost = (id, history) => dispatch => {
   fetch(`/api/post/like/${id}`, {
     method: 'POST',
     headers: getHeaders()
@@ -212,10 +277,18 @@ export const likeOrUnlikePost = id => dispatch => {
         payload: sanitize(updatedPost)
       });
     })
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    }));
+    .catch(err => {
+      if (err.expiredUser) {
+        console.log(err);
+        logoutExpiredUser(dispatch);
+        history.push('/');
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err
+        });
+      }
+    });
 };
 
 

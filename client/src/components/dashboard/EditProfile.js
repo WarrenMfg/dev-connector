@@ -38,7 +38,7 @@ class EditProfile extends Component {
   }
 
   componentDidMount() {
-    this.props.getCurrentProfile();
+    this.props.getCurrentProfile(this.props.history);
   }
 
   componentDidUpdate(prevProps) {

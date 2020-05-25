@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER } from '../actions/types';
+import { SET_CURRENT_USER, CLEAR_PROFILE_AND_PROFILES, CLEAR_POST_AND_POSTS } from '../actions/types';
 import { unescape } from 'validator';
 import DOMpurify from 'dompurify';
 
@@ -34,6 +34,17 @@ export const setCurrentUser = decoded => {
     type: SET_CURRENT_USER,
     payload: decoded
   }
+};
+
+
+
+export const logoutExpiredUser = dispatch => {
+  // remove local storage
+  localStorage.removeItem('token');
+  // clear state
+  dispatch(setCurrentUser({}));
+  dispatch({ type: CLEAR_PROFILE_AND_PROFILES });
+  dispatch({ type: CLEAR_POST_AND_POSTS });
 };
 
 

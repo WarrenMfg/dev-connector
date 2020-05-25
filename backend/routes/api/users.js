@@ -147,6 +147,11 @@ export const loginRequired = async (req, res, next) => {
       }
 
     // otherwise, JWT is not verified (e.g. expired)
+    } else if (req.expiredUser) {
+      await User.findOneAndUpdate({ _id: req.expiredUser._id }, { isLoggedIn: false }, { new: true }).lean().exec()
+        .then( () => res.status(401).json({ expiredUser: true }) )
+        .catch( err => res.status(500).json({ message: err.message, expiredUser: true }) )
+
     } else {
       return res.status(401).json({ message: 'Unauthorized.' });
     }

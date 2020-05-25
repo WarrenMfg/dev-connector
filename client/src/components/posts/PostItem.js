@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { deletePost, likeOrUnlikePost } from '../../actions/postActions';
 
 
 class PostItem extends Component {
+  constructor(props) {
+    super(props);
+    this.onDelete = this.onDelete.bind(this);
+    this.onLikeOrUnlike = this.onLikeOrUnlike.bind(this);
+    this.didUserLikePost = this.didUserLikePost.bind(this);
+  }
+
   onDelete(id) {
-    this.props.deletePost(id);
+    this.props.deletePost(id, this.props.history);
   }
 
   onLikeOrUnlike(id) {
-    this.props.likeOrUnlikePost(id);
+    this.props.likeOrUnlikePost(id, this.props.history);
   }
 
   didUserLikePost(likes) {
@@ -23,7 +31,7 @@ class PostItem extends Component {
     const { post, auth, showActions } = this.props;
 
     const deleteButton = (
-      <button onClick={this.onDelete.bind(this, post._id)} type="button" className="btn btn-danger mr-1">
+      <button onClick={() => this.onDelete(post._id)} type="button" className="btn btn-danger mr-1">
         <i className="fas fa-times" />
       </button>
     );
@@ -45,8 +53,8 @@ class PostItem extends Component {
 
             {showActions &&
               <span>
-                <button onClick={this.onLikeOrUnlike.bind(this, post._id)} type="button" className="btn btn-light mr-1">
-                  <i className={`fas fa-thumbs-up ${this.didUserLikePost.bind(this)(post.likes) && 'text-info'}`}></i>
+                <button onClick={() => this.onLikeOrUnlike(post._id)} type="button" className="btn btn-light mr-1">
+                  <i className={`fas fa-thumbs-up ${this.didUserLikePost(post.likes) && 'text-info'}`}></i>
                   <span className="badge badge-light">{post.likes.length}</span>
                 </button>
 
@@ -79,4 +87,4 @@ const mapDispatchToProps = {
   likeOrUnlikePost
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostItem);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PostItem));

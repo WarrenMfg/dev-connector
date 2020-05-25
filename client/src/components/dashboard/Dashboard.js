@@ -13,7 +13,7 @@ import { sanitize } from '../../utils/utils';
 
 class Dashboard extends Component {
   componentDidMount() {
-    this.props.getCurrentProfile();
+    this.props.getCurrentProfile(this.props.history);
   }
 
   onDeleteClick() {

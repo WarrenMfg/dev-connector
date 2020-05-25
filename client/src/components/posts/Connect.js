@@ -20,7 +20,7 @@ class Connect extends Component {
   componentDidMount() {
 
     // get initial posts
-    this.props.getPosts();
+    this.props.getPosts(this.props.history);
 
 
     // add setInterval to continuously update new posts
@@ -29,7 +29,7 @@ class Connect extends Component {
       getLatestPostsIntervalID: setInterval(() => {
         const { posts } = this.props.post;
         // pass in createdAt date of latest post
-        posts[0] && this.props.getLatestPosts(posts[0].createdAt);
+        posts[0] && this.props.getLatestPosts(posts[0].createdAt, this.props.history);
       }, 3000)
 
     });
@@ -47,7 +47,7 @@ class Connect extends Component {
             if ((footer.bottom - (window.innerHeight / 2)) <= window.innerHeight) {
               const { posts } = this.props.post;
               // get more posts
-              this.props.getMorePosts(posts[posts.length - 1].createdAt, toggle);
+              this.props.getMorePosts(posts[posts.length - 1].createdAt, toggle, this.props.history);
             } else {
               toggle.canFetch = true;
             }

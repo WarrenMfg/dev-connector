@@ -18,9 +18,9 @@ class Post extends Component {
     };
   }
   componentDidMount() {
-    this.props.getPost(this.props.match.params.id);
+    this.props.getPost(this.props.match.params.id, this.props.history);
     this.setState({ intervalID: setInterval(() => {
-      this.props.getPostForLatestComments(this.props.match.params.id);
+      this.props.getPostForLatestComments(this.props.match.params.id, this.props.history);
     }, 3000) });
   }
 
