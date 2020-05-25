@@ -27,7 +27,8 @@
     "buildBackend": "npx babel backend --out-dir dist",
     "watchBackend": "npx babel backend --watch --out-dir dist",
     "start": "node dist/server/index.js",
-    "startDev": "nodemon dist/server/index.js"
+    "startDev": "nodemon dist/server/index.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run buildFrontend && npm run buildBackend"
   },
   "nodemonConfig": {
     "watch": [
