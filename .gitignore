@@ -1,7 +1,7 @@
 node_modules
 bundle.js
 dist
-config
+config_dev.js
 package-lock.json
 TODO.txt
 seed.js

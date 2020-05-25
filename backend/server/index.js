@@ -14,6 +14,8 @@ import { resolve } from 'path';
 const PORT = process.env.PORT || 5000;
 const app = express();
 
+app.disable('x-powered-by');
+
 // middleware
 app.use(morgan('dev', {
   skip: req => ['/favicon-32x32.png', '/manifest.webmanifest', '/bundle.js'].includes(req.url)
