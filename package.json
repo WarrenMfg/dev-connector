@@ -22,7 +22,7 @@
   "main": "backend/server/index.js",
   "scripts": {
     "seed": "node dist/database/seeder.js",
-    "buildFrontend": "npx webpack",
+    "buildFrontend": "webpack",
     "watchFrontend": "npx webpack --watch",
     "buildBackend": "npx babel backend --out-dir dist",
     "watchBackend": "npx babel backend --watch --out-dir dist",
