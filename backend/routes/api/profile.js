@@ -147,7 +147,7 @@ export const getGitHubRepos = (req, res) => {
   })
     .then(repos => {
       res.set({
-        'Cache-Control': 'public, max-age=3600'
+        'Cache-Control': 'public, max-age=86400'
       });
       res.send(repos.data);
     })
