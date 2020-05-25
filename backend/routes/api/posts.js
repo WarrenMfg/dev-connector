@@ -1,7 +1,7 @@
 import Post from '../../models/Post';
 import postValidation from '../../validation/post';
 import commentValidation from '../../validation/comment';
-import { isEmpty } from '../../validation/utils';
+import { isEmpty, sanitize } from '../../validation/utils';
 
 
 const global$limit = 10;
@@ -106,6 +106,8 @@ export const getMorePosts = async (req, res) => {
 
 export const getPost = async (req, res) => {
   try {
+    sanitize(req.params);
+
     const post = await Post.findById(req.params._id).lean().exec();
 
     if (!post) {
@@ -122,6 +124,8 @@ export const getPost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   try {
+    sanitize(req.params);
+
     const post = await Post.findById(req.params._id);
 
     if (!post) {
@@ -146,6 +150,8 @@ export const deletePost = async (req, res) => {
 
 export const likeOrUnlikePost = async (req, res) => {
   try {
+    sanitize(req.params);
+
     const post = await Post.findById(req.params._id);
 
     if (!post) {
@@ -193,6 +199,8 @@ export const validateCommentInput = (req, res, next) => {
 
 export const addComment = async (req, res) => {
   try {
+    sanitize(req.params);
+
     const post = await Post.findById(req.params._id);
 
     if (!post) {
@@ -220,6 +228,8 @@ export const addComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   try {
+    sanitize(req.params);
+
     const post = await Post.findById(req.params.post_id);
 
     if (!post) {

@@ -23,7 +23,9 @@ export default data => {
 
   // email
   if (!isEmail(data.email)) {
-    errors.email = 'Email must be in the form of example@domain.com'
+    errors.email = 'Email must be in the form of example@domain.com';
+  } else if (/^\$/.test(data.email)) {
+    errors.email = 'Email must not contain special characters';
   } else {
     valid.email = escape(data.email);
   }
@@ -31,8 +33,8 @@ export default data => {
   // password
   if (!isLength(data.password, { min: 6, max: 30 })) {
     errors.password = 'Password must be between 6 and 30 characters';
-  } else if (!/^([a-zA-Z0-9!@#$%^*()-=~_+,.?]{6,30})$/.test(data.password)) {
-    errors.password = 'Password must contain a-zA-Z0-9!@#$%^*()-=~_+,.? only';
+  } else if (!/^([a-zA-Z0-9!@#%^*()-=~_+,.?]{6,30})$/.test(data.password)) {
+    errors.password = 'Password must contain a-zA-Z0-9!@#%^*()-=~_+,.? only';
   } else {
     valid.password = escape(data.password);
   }

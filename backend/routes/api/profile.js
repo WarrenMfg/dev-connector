@@ -2,7 +2,7 @@ import Profile from '../../models/Profile';
 import profileValidation from '../../validation/profile';
 import experienceValidation from '../../validation/experience';
 import educationValidation from '../../validation/education';
-import { isEmpty } from '../../validation/utils';
+import { isEmpty, sanitize } from '../../validation/utils';
 import axios from 'axios';
 import { githubAuthToken } from '../../config/config';
 
@@ -114,6 +114,8 @@ export const deleteProfile = (req, res, next) => {
 
 export const getOneBySlug = async (req, res) => {
   try {
+    sanitize(req.params);
+
     const profile = await Profile.findOne({ slug: req.params.slug });
 
     if (!profile) {
@@ -259,7 +261,7 @@ export const createExperience = async (req, res) => {
     // push and sort so newest is at index 0 and descending thereafter
     profile.experience.push(experience);
     // consider adding to frontend instead
-    profile.experience.sort((a, b) => b.from - a.from);
+    // profile.experience.sort((a, b) => b.from - a.from);
 
     // save to db
     profile.save()
@@ -332,7 +334,7 @@ export const createEducation = async (req, res) => {
     // push and sort so newest is at index 0 and descending thereafter
     profile.education.push(education);
     // consider adding to frontend instead
-    profile.education.sort((a, b) => b.from - a.from);
+    // profile.education.sort((a, b) => b.from - a.from);
 
     // save to db
     profile.save()
