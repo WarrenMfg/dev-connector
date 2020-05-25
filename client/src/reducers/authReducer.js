@@ -11,7 +11,6 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case SET_CURRENT_USER:
       return {
-        ...state, // this isn't needed right now
         isAuthenticated: !isEmpty(action.payload), // receives the decoded jwt or an empty object
         user: action.payload
       };

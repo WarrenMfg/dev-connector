@@ -7,7 +7,8 @@ import {
   UPDATE_LIKES,
   UPDATE_COMMENTS,
   DELETE_POST,
-  POST_LOADING
+  POST_LOADING,
+  CLEAR_POST_AND_POSTS
 } from '../actions/types';
 import { isEmpty } from '../utils/utils';
 
@@ -74,6 +75,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         posts: state.posts.filter(post => post._id !== action.payload)
+      };
+
+    case CLEAR_POST_AND_POSTS:
+      return {
+        ...state,
+        post: {},
+        posts: [],
+        loading: false
       };
 
     default:

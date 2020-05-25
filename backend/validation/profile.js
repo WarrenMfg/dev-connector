@@ -22,6 +22,7 @@ export default data => {
   if (isEmpty(data.status)) {
     errors.status = 'Status field is required';
   } else if (!getOptions().find(obj => obj.value === escape(data.status) )) {
+    console.log(data.status, escape(data.status))
     errors.status = 'Please select from the dropdown list';
   } else {
     valid.status = escape(data.status);

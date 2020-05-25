@@ -6,7 +6,8 @@ import {
   GET_MORE_PROFILES,
   PROFILE_LOADING,
   GET_ERRORS,
-  CLEAR_PROFILE_AND_PROFILES
+  CLEAR_PROFILE_AND_PROFILES,
+  CLEAR_POST_AND_POSTS
 } from './types';
 
 
@@ -209,12 +210,12 @@ export const deleteAccount = history => dispatch => {
     })
       .then(handleErrors)
       .then(() => {
-        // set current user to no user
-        dispatch(clearProfileAndProfiles());
-        // clear current profile
-        dispatch(setCurrentUser({}));
         // remove local storage
         localStorage.removeItem('token');
+        // clear state
+        dispatch(setCurrentUser({}));
+        dispatch(clearProfileAndProfiles());
+        dispatch({ type: CLEAR_POST_AND_POSTS });
         // redirect
         history.push('/');
       })

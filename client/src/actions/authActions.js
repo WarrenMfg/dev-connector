@@ -1,5 +1,5 @@
 import { handleErrors, getHeaders, setCurrentUser } from '../utils/utils';
-import { GET_ERRORS, CLEAR_ERRORS } from './types';
+import { GET_ERRORS, CLEAR_ERRORS, CLEAR_PROFILE_AND_PROFILES, CLEAR_POST_AND_POSTS } from './types';
 import jwtDecode from 'jwt-decode';
 
 // REGISTER
@@ -57,15 +57,21 @@ export const logoutUser = history => dispatch => {
   })
     .then(handleErrors)
     .then(() => {
+
       // remove local storage
       localStorage.removeItem('token');
-      // set current user to no user
+      // clear state
       dispatch(setCurrentUser({}));
-      // redirect to '/'
+      dispatch({ type: CLEAR_PROFILE_AND_PROFILES });
+      dispatch({ type: CLEAR_POST_AND_POSTS });
+      // redirect
       history.push('/');
     })
-    .catch(err => dispatch({
-      type: GET_ERRORS,
-      payload: err
-    }));
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err
+      });
+    });
 };
