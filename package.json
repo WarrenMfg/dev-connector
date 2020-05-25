@@ -29,7 +29,7 @@
     "start": "node dist/server/index.js",
     "startDev": "nodemon dist/server/index.js",
     "heroku-prebuild": "NPM_CONFIG_PRODUCTION=false",
-    "prestart": "webpack -p && npm run buildBackend"
+    "build": "npm run buildFrontend && npm run buildBackend"
   },
   "nodemonConfig": {
     "watch": [
