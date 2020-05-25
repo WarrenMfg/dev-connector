@@ -75,5 +75,8 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "validator": "^13.0.0"
+  },
+  "engines": {
+    "node": "12.16.3"
   }
 }
