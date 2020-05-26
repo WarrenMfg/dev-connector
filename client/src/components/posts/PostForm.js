@@ -39,7 +39,11 @@ class PostForm extends Component {
       avatar
     };
 
-    this.props.addPost(newPost, () => this.setState({ text: '' }), this.props.history);
+    // clear Connect.js setInterval
+    clearInterval(this.props.getLatestPostsIntervalID);
+    // add post, but pass in setInterval props function to restart again
+    // this will prohibit potential duplicate posts showing up in the DOM
+    this.props.addPost(newPost, () => this.setState({ text: '' }), this.props.history, this.props.getLatestPostsSetInterval);
 
   }
 
@@ -72,7 +76,9 @@ class PostForm extends Component {
 PostForm.propTypes = {
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
-  addPost: PropTypes.func.isRequired
+  addPost: PropTypes.func.isRequired,
+  getLatestPostsSetInterval: PropTypes.func.isRequired,
+  getLatestPostsIntervalID: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({

@@ -16,7 +16,7 @@ import { handleErrors, getHeaders, sanitize, logoutExpiredUser } from '../utils/
 
 
 
-export const addPost = (postData, clearForm, history) => dispatch => {
+export const addPost = (postData, clearForm, history, getLatestPostsSetInterval) => dispatch => {
   dispatch(clearErrors());
 
   fetch('/api/post', {
@@ -32,6 +32,7 @@ export const addPost = (postData, clearForm, history) => dispatch => {
         payload: sanitize(post)
       });
       clearForm();
+      getLatestPostsSetInterval();
   })
     .catch(err => {
       if (err.expiredUser) {
@@ -42,6 +43,7 @@ export const addPost = (postData, clearForm, history) => dispatch => {
           type: GET_ERRORS,
           payload: err
         });
+        getLatestPostsSetInterval();
       }
     });
 };
