@@ -2,7 +2,6 @@ node_modules
 bundle.js
 dist
 config_dev.js
-package-lock.json
 TODO.txt
 seed.js
 seedRoutes.js
