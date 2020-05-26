@@ -52,12 +52,12 @@ app.use((req, res, next) => {
 app.use('/api', apiRouter);
 app.use('/seed', seedRouter);
 
-app.get('/bundle.js', (req, res) => {
-  const gzip = createGzip();
-  const bundle = createReadStream(resolve(__dirname, '../../client/public/bundle.js'));
-  res.set({ 'Content-Encoding': 'gzip', 'Cache-Control': 'public, max-age=86400' });
-  bundle.pipe(gzip).pipe(res);
-});
+// app.get('/bundle.js', (req, res) => {
+//   const gzip = createGzip();
+//   const bundle = createReadStream(resolve(__dirname, '../../client/public/bundle.js'));
+//   res.set({ 'Content-Encoding': 'gzip', 'Cache-Control': 'public, max-age=86400' });
+//   bundle.pipe(gzip).pipe(res);
+// });
 
 // serve all static files
 app.use(express.static(resolve(__dirname, '../../client/public')));
