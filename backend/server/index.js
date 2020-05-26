@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import jwtDecode from 'jwt-decode';
 import { secret } from '../config/config';
 import apiRouter from '../routes/routes';
-import seedRouter from '../routes/seedRoutes';
 import { connect } from '../database/index';
 import { createGzip } from 'zlib';
 import { createReadStream } from 'fs';
