@@ -1,5 +1,4 @@
 import express from 'express';
-import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import jwtDecode from 'jwt-decode';
 import { secret } from '../config/config';
@@ -17,9 +16,6 @@ const app = express();
 app.disable('x-powered-by');
 
 // middleware
-app.use(morgan('dev', {
-  skip: req => ['/favicon-32x32.png', '/manifest.webmanifest', '/bundle.js'].includes(req.url)
-}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -50,14 +46,13 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/api', apiRouter);
-app.use('/seed', seedRouter);
 
-// app.get('/bundle.js', (req, res) => {
-//   const gzip = createGzip();
-//   const bundle = createReadStream(resolve(__dirname, '../../client/public/bundle.js'));
-//   res.set({ 'Content-Encoding': 'gzip', 'Cache-Control': 'public, max-age=86400' });
-//   bundle.pipe(gzip).pipe(res);
-// });
+app.get('/bundle.js', (req, res) => {
+  const gzip = createGzip();
+  const bundle = createReadStream(resolve(__dirname, '../../client/public/bundle.js'));
+  res.set({ 'Content-Encoding': 'gzip', 'Cache-Control': 'public, max-age=86400' });
+  bundle.pipe(gzip).pipe(res);
+});
 
 // serve all static files
 app.use(express.static(resolve(__dirname, '../../client/public')));

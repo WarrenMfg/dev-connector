@@ -1,6 +1,6 @@
 import { URI_dev, secret_dev, expiresIn_dev, githubAuthToken_dev } from './config_dev';
 
-const isInProductionMode = false;
+const isInProductionMode = true;
 
 export const URI = isInProductionMode ?
   process.env.MONGO_URI :
