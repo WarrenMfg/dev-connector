@@ -21,6 +21,7 @@
   },
   "main": "dist/server/index.js",
   "scripts": {
+    "preinstall": "cd client/src && ls",
     "seed": "node dist/database/seeder.js",
     "buildFrontend": "npx webpack",
     "watchFrontend": "npx webpack --watch",
