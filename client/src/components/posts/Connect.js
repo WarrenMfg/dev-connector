@@ -12,27 +12,21 @@ class Connect extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      getLatestPostsIntervalID: null,
+      getLatestPostsIntervalID: setInterval(() => {
+        const { posts } = this.props.post;
+        // pass in createdAt date of latest post
+        posts[0] && this.props.getLatestPosts(posts[0].createdAt, this.props.history);
+      }, 3000),
       throttledInfiniteScrollingTimeoutID: null
     };
+
+    this.getLatestPostsSetInterval = this.getLatestPostsSetInterval.bind(this);
   }
 
   componentDidMount() {
 
     // get initial posts
     this.props.getPosts(this.props.history);
-
-
-    // add setInterval to continuously update new posts
-    this.setState({
-
-      getLatestPostsIntervalID: setInterval(() => {
-        const { posts } = this.props.post;
-        // pass in createdAt date of latest post
-        posts[0] && this.props.getLatestPosts(posts[0].createdAt, this.props.history);
-      }, 3000)
-
-    });
 
     // throttled infinite scrolling
     window.onscroll = ( () => {
@@ -64,6 +58,18 @@ class Connect extends Component {
     window.onscroll = null;
   }
 
+  getLatestPostsSetInterval() {
+    this.setState({
+
+      getLatestPostsIntervalID: setInterval(() => {
+        const { posts } = this.props.post;
+        // pass in createdAt date of latest post
+        posts[0] && this.props.getLatestPosts(posts[0].createdAt, this.props.history);
+      }, 3000)
+
+    });
+  }
+
   render() {
     const { posts, loading } = this.props.post;
     let postContent;
@@ -81,7 +87,7 @@ class Connect extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <PostForm />
+              <PostForm getLatestPostsSetInterval={this.getLatestPostsSetInterval} getLatestPostsIntervalID={this.state.getLatestPostsIntervalID} />
               {postContent}
             </div>
           </div>

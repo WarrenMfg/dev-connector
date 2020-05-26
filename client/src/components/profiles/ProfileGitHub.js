@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 
 class ProfileGitHub extends Component {
@@ -48,7 +47,7 @@ class ProfileGitHub extends Component {
     return (
       <div ref={this.githubRef} id="github">
         <hr />
-        <h3 className="mb-4">Latest Github Repos</h3>
+        <h3 className="mb-4">Latest GitHub Repos</h3>
         {recentRepos}
       </div>
     );
