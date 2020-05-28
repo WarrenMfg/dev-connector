@@ -2,7 +2,7 @@
 
 **Message Board with Profiles** | *React, Redux, Bootstrap, Express, Node, MongoDB, Heroku*
 
-Post, comment, and like messages; add a CRUD profile to display most recent repos using GitHub’s API
+Post, like, and comment on messages; add a CRUD profile to display most recent repos using GitHub’s API
 
 - Hashed and salted passwords with bcrypt; authorized protected API routes and components with JWT
 
