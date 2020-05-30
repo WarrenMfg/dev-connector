@@ -30,6 +30,8 @@ app.use((req, res, next) => {
         } else {
           // for loginRequired middleware
           req.user = decode;
+          // to protect recruiter login account
+          if (req.user.userName === 'kent-warren') res.end();
         }
         next();
       });
