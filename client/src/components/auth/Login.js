@@ -16,6 +16,7 @@ class Login extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.populateRecruiterLogin = this.populateRecruiterLogin.bind(this);
   }
 
   componentDidMount() {
@@ -38,6 +39,10 @@ class Login extends Component {
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  populateRecruiterLogin() {
+    this.setState({ email: 'great@javascript.com', password: 'webdev' });
   }
 
   onSubmit(e) {
@@ -85,6 +90,10 @@ class Login extends Component {
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
 
+              <div style={{ cursor: 'pointer' }} onClick={this.populateRecruiterLogin}>
+                <p className="text-center" style={{ marginBottom: 0 }}>Recruiters, click here to use the following:</p>
+                <p className="text-center">Email Address: great@javascript.com | Password: webdev</p>
+              </div>
             </div>
           </div>
         </div>
