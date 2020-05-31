@@ -31,7 +31,7 @@ app.use((req, res, next) => {
           // for loginRequired middleware
           req.user = decode;
           // to protect recruiter login account
-          // if ( req.user.userName === 'kent-warren' && (req.method === 'POST' || req.method === 'DELETE') ) return res.end();
+          if ( req.user.userName === 'kent-warren' && (req.method === 'POST' || req.method === 'DELETE') ) return res.end();
         }
         next();
       });
