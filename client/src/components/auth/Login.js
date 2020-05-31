@@ -91,8 +91,9 @@ class Login extends Component {
               </form>
 
               <div style={{ cursor: 'pointer' }} onClick={this.populateRecruiterLogin}>
-                <p className="text-center" style={{ marginBottom: 0 }}>Recruiters, click here to use the following:</p>
-                <p className="text-center">Email Address: great@javascript.com | Password: webdev</p>
+                <p className="text-center" style={{ marginBottom: 0 }}>Recruiters, click here to browse with this account.</p>
+                <p className="text-center" style={{ marginBottom: 0 }}>Email Address: great@javascript.com | Password: webdev</p>
+                <p className="text-center">Note, this account only fulfills GET requests.</p>
               </div>
             </div>
           </div>
