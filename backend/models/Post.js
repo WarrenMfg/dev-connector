@@ -13,7 +13,6 @@ const PostSchema = new mongoose.Schema({
     required: true
   },
   ///////////////////////
-  // consider removing, and using .populate() instead
   userName: {
     type: String
   },
@@ -31,7 +30,6 @@ const PostSchema = new mongoose.Schema({
   ],
   comments: [
     {
-      // how to handle comments.user when user is deleted--default?
       user: {
         type: mongoose.ObjectId,
         ref: 'User',
@@ -41,7 +39,6 @@ const PostSchema = new mongoose.Schema({
         required: true
       },
       ///////////////////////
-      // consider removing, and using .populate() instead
       userName: {
         type: String
       },
