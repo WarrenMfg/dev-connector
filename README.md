@@ -1,6 +1,8 @@
 # **devConnector**
 
-**Message Board with Profiles** | *React, Redux, Bootstrap, Express, Node, MongoDB, Heroku*
+**Message Board with Profiles**
+
+*React, Redux, Bootstrap, Express, Node, MongoDB, Heroku*
 
 Post, like, and comment on messages; add a CRUD profile to display most recent repos using GitHub’s API
 
@@ -12,6 +14,6 @@ Post, like, and comment on messages; add a CRUD profile to display most recent r
 
 - Cross-referenced, populated, and aggregated database collections; sanitized URL parameters for queries
 
-[devConnector website](https://devcon-social.herokuapp.com/)
+---
 
 ![devConnector](splash.png)
